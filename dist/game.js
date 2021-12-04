@@ -2773,7 +2773,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var JUMP_FORCE = 580;
   var BIG_JUMP_FORCE = 850;
   var MAGIC_SPEED = 400;
-  var ENEMY_SPEED = 50;
+  var ENEMY_SPEED = 40;
   var FALL_DEATH = 600;
   var _a;
   var LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
@@ -2840,14 +2840,15 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
   var score = add([
     text(SCORE_GLOBAL),
-    pos(30, 6),
+    pos(20, 6),
     layer("ui"),
     {
       value: SCORE_GLOBAL
-    }
+    },
+    scale(0.3)
   ]);
-  add([text("level " + parseInt(LEVEL_INDEX + 1)), pos(40, 6), scale(0.3)]);
-  var player = add([sprite("santa"), pos(30, 0), area(), body(), big(), scale(0.65)]);
+  add([text("level " + parseInt(LEVEL_INDEX + 1)), pos(50, 6), scale(0.3)]);
+  var player = add([sprite("santa"), pos(50, 0), area(), body(), big(), scale(0.65)]);
   player.action(() => {
     camPos(player.pos);
     if (player.pos.y >= FALL_DEATH) {

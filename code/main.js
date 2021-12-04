@@ -55,7 +55,7 @@ const MOVE_SPEED = 200
 const JUMP_FORCE = 580
 const BIG_JUMP_FORCE = 850
 const MAGIC_SPEED = 400
-const ENEMY_SPEED = 50
+const ENEMY_SPEED = 40
 const FALL_DEATH = 600
 const LEVEL_INDEX = args.level ?? 0 
 const SCORE_GLOBAL = args.score ?? 0
@@ -127,18 +127,19 @@ const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
 // add a score
 const score = add([
   text(SCORE_GLOBAL),
-  pos(30,6),
+  pos(20,6),
   layer('ui'),
   {
     value: SCORE_GLOBAL,  
-  }
+  }, 
+  scale(.3)
 ])
 
 // add level numbers
-add([text('level ' + parseInt(LEVEL_INDEX + 1)), pos(40,6), scale(0.3)])
+add([text('level ' + parseInt(LEVEL_INDEX + 1)), pos(50,6), scale(0.3)])
 
 // add player
-const player = add([sprite('santa'), pos(30,0), area(), body(), big(), scale(.65)])
+const player = add([sprite('santa'), pos(50,0), area(), body(), big(), scale(.65)])
 
 // add camera movement
 player.action(() => {
