@@ -410,7 +410,7 @@
   }
   __name(pn, "pn");
   i(pn, "testPointPoint");
-  function dt(e, t) {
+  function dt2(e, t) {
     switch (e.shape) {
       case "rect":
         return At(t, e);
@@ -425,8 +425,8 @@
     }
     throw new Error(`Unknown area shape: ${e.shape}`);
   }
-  __name(dt, "dt");
-  i(dt, "testAreaRect");
+  __name(dt2, "dt");
+  i(dt2, "testAreaRect");
   function kt(e, t) {
     switch (e.shape) {
       case "rect":
@@ -498,7 +498,7 @@
   function Ft(e, t) {
     switch (t.shape) {
       case "rect":
-        return dt(e, t);
+        return dt2(e, t);
       case "line":
         return kt(e, t);
       case "circle":
@@ -2140,7 +2140,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       let s = 0;
       return { id: "cleanup", require: ["pos", "area"], update() {
         let u = { p1: c(0, 0), p2: c(b(), P()) };
-        dt(this.screenArea(), u) ? s = 0 : (s += L(), s >= n && this.destroy());
+        dt2(this.screenArea(), u) ? s = 0 : (s += L(), s >= n && this.destroy());
       } };
     }
     __name(Ue, "Ue");
@@ -2637,7 +2637,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     __name(Yt, "Yt");
     i(Yt, "record");
-    let Xe = { loadRoot: v.loadRoot, loadSprite: v.loadSprite, loadSpriteAtlas: v.loadSpriteAtlas, loadSound: v.loadSound, loadFont: v.loadFont, loadShader: v.loadShader, loadAseprite: v.loadAseprite, loadPedit: v.loadPedit, loadBean: v.loadBean, load: v.load, width: b, height: P, center: vt, dt: L, time: r.time, screenshot: r.screenshot, record: Yt, focused: r.isFocused, isFocused: r.isFocused, focus: r.focus, cursor: r.cursor, regCursor: Ut, fullscreen: r.fullscreen, isFullscreen: r.isFullscreen, onLoad: _e, ready: _e, isTouch: () => r.isTouch, layers: ye, camPos: S, camScale: T, camRot: _, shake: z, toScreen: X, toWorld: W, gravity: et, add: F, readd: ae, destroy: Me, destroyAll: Ve, get: be, every: me, revery: Ye, pos: ge, scale: tt, rotate: gt, color: Ze, opacity: Je, origin: wt, layer: xt, area: Lr, sprite: Fr, text: Or, rect: _r, circle: Wr, uvquad: Xr, outline: qr, body: zr, shader: Zr, timer: $r, solid: Jr, fixed: Hr, stay: Nr, health: jr, lifespan: Qr, z: rt, move: we, cleanup: Ue, follow: nt, state: Kr, on: w, onUpdate: G, onDraw: De, onCollide: Re, onClick: Ee, onHover: ce, action: G, render: De, collides: Re, clicks: Ee, hovers: ce, onKeyDown: o, onKeyPress: f, onKeyPressRepeat: U, onKeyRelease: R, onMouseDown: x, onMousePress: E, onMouseRelease: C, onMouseMove: O, onCharInput: H, onTouchStart: re, onTouchMove: Z, onTouchEnd: ee, keyDown: o, keyPress: f, keyPressRep: U, keyRelease: R, mouseDown: x, mouseClick: E, mouseRelease: C, mouseMove: O, charInput: H, touchStart: re, touchMove: Z, touchEnd: ee, mousePos: Y, mouseWorldPos: ie, mouseDeltaPos: r.mouseDeltaPos, isKeyDown: r.isKeyDown, isKeyPressed: r.isKeyPressed, isKeyPressedRepeat: r.isKeyPressedRepeat, isKeyReleased: r.isKeyReleased, isMouseDown: r.isMouseDown, isMousePressed: r.isMousePressed, isMouseReleased: r.isMouseReleased, isMouseMoved: r.isMouseMoved, keyIsDown: r.isKeyDown, keyIsPressed: r.isKeyPressed, keyIsPressedRep: r.isKeyPressedRepeat, keyIsReleased: r.isKeyReleased, mouseIsDown: r.isMouseDown, mouseIsClicked: r.isMousePressed, mouseIsReleased: r.isMouseReleased, mouseIsMoved: r.isMouseMoved, loop: bt, wait: xe, play: N, volume: t.volume, burp: t.burp, audioCtx: t.ctx, rng: Dt, rand: je, randi: Rt, randSeed: ar, vec2: c, dir: ot, rgb: I, hsl2rgb: ir, quad: de, choose: cr, chance: ur, lerp: Ne, map: Oe, mapc: rr, wave: Pt, deg2rad: Ce, rad2deg: Tt, testAreaRect: dt, testAreaLine: kt, testAreaCircle: It, testAreaPolygon: Lt, testAreaPoint: ht, testAreaArea: Ft, testLineLine: Se, testRectRect: At, testRectLine: at, testRectPoint: Be, testPolygonPoint: $e, testLinePolygon: Qe, testPolygonPolygon: lt, testCircleCircle: Vt, testCirclePoint: ct, testRectPolygon: ut, drawSprite: j, drawText: oe, drawRect: a.drawRect, drawLine: a.drawLine, drawLines: a.drawLines, drawTriangle: a.drawTriangle, drawCircle: a.drawCircle, drawEllipse: a.drawEllipse, drawUVQuad: a.drawUVQuad, drawPolygon: a.drawPolygon, pushTransform: a.pushTransform, popTransform: a.popTransform, pushTranslate: a.pushTranslate, pushRotate: a.pushRotateZ, pushScale: a.pushScale, debug: Q, scene: en, go: tn, addLevel: sn, getData: rn, setData: Gt, plug: Et, ASCII_CHARS: qt, CP437_CHARS: Dr, LEFT: c(-1, 0), RIGHT: c(1, 0), UP: c(0, -1), DOWN: c(0, 1), RED: I(255, 0, 0), GREEN: I(0, 255, 0), BLUE: I(0, 0, 255), YELLOW: I(255, 255, 0), MAGENTA: I(255, 0, 255), CYAN: I(0, 255, 255), WHITE: I(255, 255, 255), BLACK: I(0, 0, 0), canvas: r.canvas };
+    let Xe = { loadRoot: v.loadRoot, loadSprite: v.loadSprite, loadSpriteAtlas: v.loadSpriteAtlas, loadSound: v.loadSound, loadFont: v.loadFont, loadShader: v.loadShader, loadAseprite: v.loadAseprite, loadPedit: v.loadPedit, loadBean: v.loadBean, load: v.load, width: b, height: P, center: vt, dt: L, time: r.time, screenshot: r.screenshot, record: Yt, focused: r.isFocused, isFocused: r.isFocused, focus: r.focus, cursor: r.cursor, regCursor: Ut, fullscreen: r.fullscreen, isFullscreen: r.isFullscreen, onLoad: _e, ready: _e, isTouch: () => r.isTouch, layers: ye, camPos: S, camScale: T, camRot: _, shake: z, toScreen: X, toWorld: W, gravity: et, add: F, readd: ae, destroy: Me, destroyAll: Ve, get: be, every: me, revery: Ye, pos: ge, scale: tt, rotate: gt, color: Ze, opacity: Je, origin: wt, layer: xt, area: Lr, sprite: Fr, text: Or, rect: _r, circle: Wr, uvquad: Xr, outline: qr, body: zr, shader: Zr, timer: $r, solid: Jr, fixed: Hr, stay: Nr, health: jr, lifespan: Qr, z: rt, move: we, cleanup: Ue, follow: nt, state: Kr, on: w, onUpdate: G, onDraw: De, onCollide: Re, onClick: Ee, onHover: ce, action: G, render: De, collides: Re, clicks: Ee, hovers: ce, onKeyDown: o, onKeyPress: f, onKeyPressRepeat: U, onKeyRelease: R, onMouseDown: x, onMousePress: E, onMouseRelease: C, onMouseMove: O, onCharInput: H, onTouchStart: re, onTouchMove: Z, onTouchEnd: ee, keyDown: o, keyPress: f, keyPressRep: U, keyRelease: R, mouseDown: x, mouseClick: E, mouseRelease: C, mouseMove: O, charInput: H, touchStart: re, touchMove: Z, touchEnd: ee, mousePos: Y, mouseWorldPos: ie, mouseDeltaPos: r.mouseDeltaPos, isKeyDown: r.isKeyDown, isKeyPressed: r.isKeyPressed, isKeyPressedRepeat: r.isKeyPressedRepeat, isKeyReleased: r.isKeyReleased, isMouseDown: r.isMouseDown, isMousePressed: r.isMousePressed, isMouseReleased: r.isMouseReleased, isMouseMoved: r.isMouseMoved, keyIsDown: r.isKeyDown, keyIsPressed: r.isKeyPressed, keyIsPressedRep: r.isKeyPressedRepeat, keyIsReleased: r.isKeyReleased, mouseIsDown: r.isMouseDown, mouseIsClicked: r.isMousePressed, mouseIsReleased: r.isMouseReleased, mouseIsMoved: r.isMouseMoved, loop: bt, wait: xe, play: N, volume: t.volume, burp: t.burp, audioCtx: t.ctx, rng: Dt, rand: je, randi: Rt, randSeed: ar, vec2: c, dir: ot, rgb: I, hsl2rgb: ir, quad: de, choose: cr, chance: ur, lerp: Ne, map: Oe, mapc: rr, wave: Pt, deg2rad: Ce, rad2deg: Tt, testAreaRect: dt2, testAreaLine: kt, testAreaCircle: It, testAreaPolygon: Lt, testAreaPoint: ht, testAreaArea: Ft, testLineLine: Se, testRectRect: At, testRectLine: at, testRectPoint: Be, testPolygonPoint: $e, testLinePolygon: Qe, testPolygonPolygon: lt, testCircleCircle: Vt, testCirclePoint: ct, testRectPolygon: ut, drawSprite: j, drawText: oe, drawRect: a.drawRect, drawLine: a.drawLine, drawLines: a.drawLines, drawTriangle: a.drawTriangle, drawCircle: a.drawCircle, drawEllipse: a.drawEllipse, drawUVQuad: a.drawUVQuad, drawPolygon: a.drawPolygon, pushTransform: a.pushTransform, popTransform: a.popTransform, pushTranslate: a.pushTranslate, pushRotate: a.pushRotateZ, pushScale: a.pushScale, debug: Q, scene: en, go: tn, addLevel: sn, getData: rn, setData: Gt, plug: Et, ASCII_CHARS: qt, CP437_CHARS: Dr, LEFT: c(-1, 0), RIGHT: c(1, 0), UP: c(0, -1), DOWN: c(0, 1), RED: I(255, 0, 0), GREEN: I(0, 255, 0), BLUE: I(0, 0, 255), YELLOW: I(255, 255, 0), MAGENTA: I(255, 0, 255), CYAN: I(0, 255, 255), WHITE: I(255, 255, 255), BLACK: I(0, 0, 0), canvas: r.canvas };
     if (Et(Ir), e.plugins && e.plugins.forEach(Et), e.global !== false)
       for (let n in Xe)
         window[n] = Xe[n];
@@ -2757,9 +2757,23 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("arrowLeft", "sprites/arrowLeft.png");
   loadSprite("buttonStart", "sprites/buttonStart.png");
   loadSprite("arrowUp", "sprites/arrowUp.png");
+  loadPedit("magic", "sprites/magic.pedit");
+  loadSprite("lightning-blue", "sprites/lightning-blue.png");
+  scene("lose", () => {
+    add([
+      text("Game Over"),
+      origin("center"),
+      pos(width() / 2, height() / 2),
+      scale(1)
+    ]);
+  });
   layer(["obj", "ui"], "obj");
   var MOVE_SPEED = 200;
-  var JUMP_FORCE = 510;
+  var JUMP_FORCE = 580;
+  var MAGIC_SPEED = 400;
+  var ENEMY_SPEED = 50;
+  var currentJumpForce = JUMP_FORCE;
+  var isJumping = true;
   var map = [
     "                                   ",
     "                                   ",
@@ -2767,11 +2781,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "                                   ",
     "                                   ",
     "                                   ",
+    "                     =z            ",
     "                                   ",
+    "            =*=%=                  ",
     "                                   ",
-    "    %      =*=%=                   ",
-    "                                   ",
-    "                                   ",
+    "      ==                           ",
     "t                                tt",
     "                             |     ",
     "                   ^    ^          ",
@@ -2782,12 +2796,15 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     width: 20,
     height: 20,
     "=": () => [sprite("block-4"), "ground", solid(), scale(0.35), area()],
-    "$": () => [sprite("present")],
+    "$": () => [sprite("present"), "green-present", solid(), scale(0.9), area()],
+    "j": () => [sprite("candy-cane2"), "candy-cane", solid(), scale(0.35), area()],
+    "l": () => [sprite("lightning-blue"), "lightning-blue", solid(), scale(0.2), area()],
     "%": () => [sprite("mystery-box2"), "present-surprise", solid(), scale(0.35), area()],
     "*": () => [sprite("mystery-box2"), "candy-cane-surprise", solid(), scale(0.35), area()],
-    "}": () => [sprite("unboxed")],
+    "z": () => [sprite("mystery-box2"), "lightning-surprise", solid(), scale(0.35), area()],
+    "}": () => [sprite("unboxed"), solid(), scale(0.35), area()],
     "|": () => [sprite("lamp-post"), "post", area()],
-    "^": () => [sprite("bunny-enemy"), "enemy", solid(), scale(0.2), area()],
+    "^": () => [sprite("bunny-enemy"), "b-enemy", solid(), scale(0.2), area()],
     "#": () => [sprite("block-4"), "ground", scale(0.35), area()],
     "-": () => [sprite("block-2"), "ground", scale(0.35), area()],
     "_": () => [sprite("block-3"), "ground", scale(0.35), area()],
@@ -2795,24 +2812,104 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "t": () => [sprite("tree"), "ground", scale(0.45), area()]
   };
   var gameLevel = addLevel(map, levelCfg);
-  var scoreLabel = add[text("0"), pos(30, 6), layer("ui"), {
-    value: "0"
+  var score = add[text("0"), pos(30, 6), layer("ui"), {
+    value: 0
   }];
   add([text("level 0"), pos(40, 6), scale(0.3)]);
-  var player = add([sprite("santa"), pos(30, 0), area(), body(), scale(0.65)]);
+  var player = add([sprite("santa"), pos(30, 0), area(), body(), big(), scale(0.65)]);
   keyDown("left", () => {
     player.move(-MOVE_SPEED, 0);
   });
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0);
   });
-  keyPress("up", () => {
+  keyPress("space", () => {
     if (player.grounded())
-      player.jump(JUMP_FORCE);
+      player.jump(currentJumpForce);
   });
-  player.on("headbump", (obj) => {
-    if (obj.is("present-surprise")) {
-      gameLevel.spawn("$", obj.gridPos.sub(0, 1));
+  keyDown("up", () => {
+    spawnMagic(player.pos.add(0, -35));
+  });
+  function spawnMagic(p) {
+    add([
+      rect(3, 3),
+      pos(p),
+      origin("center"),
+      area(),
+      color(44, 171, 77),
+      "magic"
+    ]);
+  }
+  __name(spawnMagic, "spawnMagic");
+  onUpdate("magic", (m) => {
+    m.move(0, -MAGIC_SPEED);
+    if (m.pos.y < 0) {
+      destroy(m);
+    }
+  });
+  onUpdate("b-enemy", (b) => {
+    b.move(-ENEMY_SPEED, 0);
+  });
+  function big() {
+    let timer = 0;
+    let isBig = false;
+    return {
+      update() {
+        if (isBig) {
+          timer -= dt();
+          if (timer <= 0) {
+            this.smallify();
+          }
+        }
+      },
+      isBig() {
+        return isBig;
+      },
+      smallify() {
+        this.scale = vec2(0.65);
+        timer = 0;
+        currentJumpForce = JUMP_FORCE;
+        isBig = false;
+      },
+      biggify(time) {
+        this.scale = vec2(1);
+        timer = time;
+        currentJumpForce = 650;
+        isBig = true;
+      }
+    };
+  }
+  __name(big, "big");
+  onCollide("magic", "present-surprise", (m, p) => {
+    gameLevel.spawn("$", p.gridPos.sub(1, 2));
+    gameLevel.spawn("=", p.gridPos.sub(0, 0));
+    destroy(m);
+  });
+  onCollide("magic", "candy-cane-surprise", (m, c2) => {
+    gameLevel.spawn("j", c2.gridPos.sub(0, 1));
+    gameLevel.spawn("=", c2.gridPos.sub(0, 0));
+    destroy(m);
+  });
+  onCollide("magic", "lightning-surprise", (m, l) => {
+    gameLevel.spawn("l", l.gridPos.sub(0, 1.5));
+    gameLevel.spawn("=", l.gridPos.sub(0, 0));
+    destroy(m);
+  });
+  player.onCollide("lightning-blue", (b) => {
+    player.biggify(7);
+    destroy(b);
+  });
+  player.onCollide("green-present", (g) => {
+    destroy(g);
+  });
+  player.onCollide("candy-cane", (c2) => {
+    destroy(c2);
+  });
+  player.onCollide("b-enemy", (b) => {
+    if (isJumping) {
+      destroy(b);
+    } else {
+      go("lose");
     }
   });
 })();
