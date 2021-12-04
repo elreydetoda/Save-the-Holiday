@@ -61,37 +61,56 @@ let CURRENT_JUMP_FORCE = JUMP_FORCE
 let isJumping = true
 
 // map creation
-const map = [
-'                                   ',
-'                                   ',
-'                                   ',
-'                                   ',
-'                                   ',
-'                                   ',
-'                     =z            ',
-'                                   ',
-'            =*=%=                  ',
-'                                   ',
-'      ==                           ',
-'t                                tt',
-'                             |     ',
-'                   ^    ^          ',
-'                                   ',
-'===============================  ==',
-]
+const maps = [
+  [
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                     =z            ',
+  '                                   ',
+  '            =*=%=                  ',
+  '                                   ',
+  '      ==                           ',
+  't                                tt',
+  '                             |     ',
+  '                   ^    ^          ',
+  '                                   ',
+  '===============================  ==',
+  ], [
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                                   ',
+  '                     =z            ',
+  '                                   ',
+  '            =*=%=                  ',
+  '                                   ',
+  '      ==                           ',
+  't                                tt',
+  '                             |     ',
+  '                   ^    ^          ',
+  '                                   ',
+  '===============================  ==',
+  ],
+  ]
 
 const levelCfg = {
   width: 20,
   height: 20,
   '=': () => [sprite('block-4'), 'ground', solid(), scale(0.35), area()],
-  '$': () => [sprite('present'), 'green-present', solid(), scale(0.9), area()],
-  'j': () => [sprite('candy-cane2'), 'candy-cane', solid(), scale(0.35), area()],
-  'l': () => [sprite('lightning-blue'), 'lightning-blue', solid(), scale(0.2), area()],
-  '%': () => [sprite('mystery-box2'), 'present-surprise', solid(), scale(0.35), area()],
-  '*': () => [sprite('mystery-box2'), 'candy-cane-surprise', solid(), scale(0.35), area()],
-  'z': () => [sprite('mystery-box2'), 'lightning-surprise', solid(), scale(0.35), area()],
+  '$': () => [sprite('present'), 'green-present', 'gift', solid(), scale(0.9), area()],
+  'j': () => [sprite('candy-cane2'), 'candy-cane','gift', solid(), scale(0.35), area()],
+  'l': () => [sprite('lightning-blue'), 'lightning-blue', 'gift', solid(), scale(0.2), area()],
+  '%': () => [sprite('mystery-box2'), 'present-surprise','surprise-box', solid(), scale(0.35), area()],
+  '*': () => [sprite('mystery-box2'), 'candy-cane-surprise','surprise-box', solid(), scale(0.35), area()],
+  'z': () => [sprite('mystery-box2'), 'lightning-surprise','surprise-box', solid(), scale(0.35), area()],
   '}': () => [sprite('unboxed'), solid(), scale(0.35), area()],
-  '|': () => [sprite('lamp-post'),'post', area()],
+  '|': () => [sprite('lamp-post'),'post', area(), solid()],
   '^': () => [sprite('bunny-enemy'), 'b-enemy', solid(), scale(0.2), area()],
   '#': () => [sprite('block-4'), 'ground', scale(0.35), area()],
   '-': () => [sprite('block-2'), 'ground', scale(0.35), area()],
@@ -100,7 +119,7 @@ const levelCfg = {
   't': () => [sprite('tree'), 'ground', scale(0.45), area()],
 }
 
-const gameLevel = addLevel(map, levelCfg)
+const gameLevel = addLevel(maps[0], levelCfg)
 
 // TO-DO: add a score
 const score = add[(
@@ -262,4 +281,12 @@ player.onCollide('b-enemy', (b) => {
   } else {
     go('lose') //, score:scoreLabel.value)
   }
+})
+
+// lamp post 
+player.onCollide('post', (p) => {
+  // go('game', {
+  //   level: (level + 1)
+  //   // score: score.value
+  // })
 })
