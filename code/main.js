@@ -51,11 +51,12 @@ layer(['obj', 'ui'], 'obj')
 // constants
 const MOVE_SPEED = 200
 const JUMP_FORCE = 580
+const BIG_JUMP_FORCE = 750
 const MAGIC_SPEED = 400
 const ENEMY_SPEED = 50
 
 // variables
-let currentJumpForce = JUMP_FORCE
+let CURRENT_JUMP_FORCE = JUMP_FORCE
 let isJumping = true
 
 // map creation
@@ -133,7 +134,7 @@ keyDown('right', () => {
 
 keyPress('space', () => {
   if(player.grounded())
-    player.jump(currentJumpForce)
+    player.jump(CURRENT_JUMP_FORCE)
 })
 
 keyDown('up', () => {
@@ -184,14 +185,14 @@ function big() {
     smallify() {
       this.scale = vec2(.65)
       timer = 0
-      currentJumpForce = JUMP_FORCE
       isBig = false
+      CURRENT_JUMP_FORCE = JUMP_FORCE
     },
     biggify(time) {
       this.scale = vec2(1)
       timer = time
-      currentJumpForce = 650
       isBig = true
+            CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
     }
   }
 }

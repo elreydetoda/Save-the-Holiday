@@ -2770,9 +2770,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   layer(["obj", "ui"], "obj");
   var MOVE_SPEED = 200;
   var JUMP_FORCE = 580;
+  var BIG_JUMP_FORCE = 750;
   var MAGIC_SPEED = 400;
   var ENEMY_SPEED = 50;
-  var currentJumpForce = JUMP_FORCE;
+  var CURRENT_JUMP_FORCE = JUMP_FORCE;
   var isJumping = true;
   var map = [
     "                                   ",
@@ -2825,7 +2826,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   keyPress("space", () => {
     if (player.grounded())
-      player.jump(currentJumpForce);
+      player.jump(CURRENT_JUMP_FORCE);
   });
   keyDown("up", () => {
     spawnMagic(player.pos.add(0, -35));
@@ -2868,14 +2869,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       smallify() {
         this.scale = vec2(0.65);
         timer = 0;
-        currentJumpForce = JUMP_FORCE;
         isBig = false;
+        CURRENT_JUMP_FORCE = JUMP_FORCE;
       },
       biggify(time) {
         this.scale = vec2(1);
         timer = time;
-        currentJumpForce = 650;
         isBig = true;
+        CURRENT_JUMP_FORCE = BIG_JUMP_FORCE;
       }
     };
   }
