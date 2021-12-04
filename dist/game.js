@@ -2753,6 +2753,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("tree", "sprites/tree.png");
   loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
   loadSprite("lamp-post", "sprites/lamp-post.png");
+  loadSprite("arrowRight", "sprites/arrowRight.png");
+  loadSprite("arrowLeft", "sprites/arrowLeft.png");
+  loadSprite("buttonStart", "sprites/buttonStart.png");
+  loadSprite("arrowUp", "sprites/arrowUp.png");
   layer(["obj", "ui"], "obj");
   var MOVE_SPEED = 200;
   var JUMP_FORCE = 510;

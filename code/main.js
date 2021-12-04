@@ -25,6 +25,10 @@ loadSprite("unboxed", "sprites/unboxed.png");
 loadSprite("tree", "sprites/tree.png");
 loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
 loadSprite("lamp-post", "sprites/lamp-post.png");
+loadSprite("arrowRight", "sprites/arrowRight.png");
+loadSprite("arrowLeft", "sprites/arrowLeft.png");
+loadSprite("buttonStart", "sprites/buttonStart.png");
+loadSprite("arrowUp", "sprites/arrowUp.png");
 
 // add layers
 layer(['obj', 'ui'], 'obj')
