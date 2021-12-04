@@ -37,55 +37,7 @@ loadSprite("lightning-blue", "sprites/lightning-blue.png");
 /* --------------- SCENES -----------------*/
 // TO-DO: win scene
 
-// menu scene
-	action("button", b => {
-		add([
-		  text("Play"),
-		  pos(240, 180),
-		  color(0, 0, 0)
-	  ])
-
-    add([
-      rect(160, 20),
-      pos(240, 210),
-      "button",
-      {
-        clickAction: () => go('game'),
-      },
-    ])
-
-    if (b.isHovered()) {
-			b.use(color(0.7, 0.7, 0.7));
-		} else {
-			b.use(color(1, 1, 1));
-		}
-
-		if (b.isClicked()) {
-			b.clickAction();
-		}
-  })
-
-  let args = {}
-  // constants
-  const MOVE_SPEED = 200
-  const JUMP_FORCE = 580
-  const BIG_JUMP_FORCE = 850
-  const MAGIC_SPEED = 400
-  const ENEMY_SPEED = 40
-  const FALL_DEATH = 600
-  const LEVEL_INDEX = args.level ?? 0 
-  const SCORE_GLOBAL = args.score ?? 0
-
-// game scene
-scene('game', () => {
-
-  // add layers
-  layer(['obj', 'ui'], 'obj')
-
-
-  // variables
-  let CURRENT_JUMP_FORCE = JUMP_FORCE
-  let isJumping = true
+// TO-DO: menu scene
 
   // map creation
   const maps = [
@@ -129,7 +81,7 @@ scene('game', () => {
   const levelCfg = {
     width: 20,
     height: 20,
-    '=': () => [sprite('block-4'), 'ground', solid(), scale(0.35), area()],
+    '=': () => [sprite('block-4'), 'ground', 'block', solid(), scale(0.35), area()],
     '$': () => [sprite('present'), 'green-present', 'gift', solid(), scale(0.9), area()],
     'j': () => [sprite('candy-cane2'), 'candy-cane','gift', solid(), scale(0.35), area()],
     'l': () => [sprite('lightning-blue'), 'lightning-blue', 'gift', solid(), scale(0.2), area()],
@@ -145,9 +97,32 @@ scene('game', () => {
     't': () => [sprite('tree'), 'ground', solid(), scale(0.45), area()],
   }
 
+
+
+// game scene
+scene('game', () => {
+
+  // add layers
+  layer(['obj', 'ui'], 'obj')
+
+  let args = {}
+  // constants
+  const MOVE_SPEED = 200
+  const JUMP_FORCE = 580
+  const BIG_JUMP_FORCE = 850
+  const MAGIC_SPEED = 400
+  const ENEMY_SPEED = 40
+  const FALL_DEATH = 600
+  const LEVEL_INDEX = args.level ?? 0 
+  const SCORE_GLOBAL = args.score ?? 0
+
+  // variables
+  let CURRENT_JUMP_FORCE = JUMP_FORCE
+  let isJumping = true
+
   const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
 
-  // add a score
+    // add a score
   const score = add([
     text(SCORE_GLOBAL),
     pos(20,6),
@@ -159,7 +134,14 @@ scene('game', () => {
   ])
 
   // add level numbers
-  add([text('level ' + parseInt(LEVEL_INDEX + 1)), pos(50,6), scale(0.3)])
+  const level = add([
+    text('level ' + parseInt(LEVEL_INDEX)), 
+    pos(50,6), 
+    {
+      value: LEVEL_INDEX,
+    },
+    scale(0.3)
+  ])
 
   // add player
   const player = add([sprite('santa'), pos(50,0), area(), body(), big(), scale(.65)])
@@ -168,7 +150,9 @@ scene('game', () => {
   player.action(() => {
     camPos(player.pos)
     if(player.pos.y >= FALL_DEATH) {
-      go('lose') //, score:scoreLabel.value)
+      go('lose', {
+        score: score.value
+      })
     }
   })
 
@@ -256,27 +240,35 @@ scene('game', () => {
 
   /* --------------- COLLISIONS -----------------*/
 
-  // -- magic collides with surprise boxes -- 
-  // green present
+  // -- magic collides with boxes -- 
+  // surprise box - green present 
   onCollide('magic', 'present-surprise', (m, p) => {
     gameLevel.spawn('$', p.gridPos.sub(1,2))
     gameLevel.spawn('=', p.gridPos.sub(0,0))
     destroy(m)
   })
 
-  // candy cane
+  // surprise box - candy cane
   onCollide('magic', 'candy-cane-surprise', (m, c) => {
     gameLevel.spawn('j', c.gridPos.sub(0,1))
     gameLevel.spawn('=', c.gridPos.sub(0,0))
     destroy(m)
   })
 
-  // blue lightning
+  // surprise box - blue lightning
   onCollide('magic', 'lightning-surprise', (m, l) => {
     gameLevel.spawn('l', l.gridPos.sub(0,1.5))
     gameLevel.spawn('=', l.gridPos.sub(0,0))
     destroy(m)
   })
+    
+  // regular block
+    onCollide('magic', 'block', (m, b) => {
+    destroy(m)
+  })
+
+  // -- enemies collide with objects -- 
+  
 
   // -- player collides with objects --
   // blue lightning
@@ -315,8 +307,10 @@ scene('game', () => {
 
   // lamp post 
   player.onCollide('post', (p) => {
+    level.value++
+    console.log(level.value)
     go('game', {
-      level: (LEVEL_INDEX + 1),
+      level: level.value,
       score: score.value
     })
   })
@@ -332,3 +326,5 @@ scene('lose', () => {
   scale(1)
   ])
 })
+
+go('game')

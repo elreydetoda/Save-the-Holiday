@@ -2759,116 +2759,101 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("arrowUp", "sprites/arrowUp.png");
   loadPedit("magic", "sprites/magic.pedit");
   loadSprite("lightning-blue", "sprites/lightning-blue.png");
-  action("button", (b) => {
-    add([
-      text("Play"),
-      pos(240, 180),
-      color(0, 0, 0)
-    ]);
-    add([
-      rect(160, 20),
-      pos(240, 210),
-      "button",
-      {
-        clickAction: () => go("game")
-      }
-    ]);
-    if (b.isHovered()) {
-      b.use(color(0.7, 0.7, 0.7));
-    } else {
-      b.use(color(1, 1, 1));
-    }
-    if (b.isClicked()) {
-      b.clickAction();
-    }
-  });
-  var args = {};
-  var MOVE_SPEED = 200;
-  var JUMP_FORCE = 580;
-  var BIG_JUMP_FORCE = 850;
-  var MAGIC_SPEED = 400;
-  var ENEMY_SPEED = 40;
-  var FALL_DEATH = 600;
-  var _a;
-  var LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
-  var _a2;
-  var SCORE_GLOBAL = (_a2 = args.score) != null ? _a2 : 0;
+  var maps = [
+    [
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                     =z            ",
+      "                                   ",
+      "            =*=%=                  ",
+      "                                   ",
+      "      ==                           ",
+      "t                                tt",
+      "                             |     ",
+      "                   ^    ^          ",
+      "                                   ",
+      "===============================  =="
+    ],
+    [
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                          =%       ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "            _*_z_                  ",
+      "                                   ",
+      "       __                          ",
+      "t                                tt",
+      "                             |     ",
+      "                   ^    ^          ",
+      "                                   ",
+      "_______________________________  __"
+    ]
+  ];
+  var levelCfg = {
+    width: 20,
+    height: 20,
+    "=": () => [sprite("block-4"), "ground", "block", solid(), scale(0.35), area()],
+    "$": () => [sprite("present"), "green-present", "gift", solid(), scale(0.9), area()],
+    "j": () => [sprite("candy-cane2"), "candy-cane", "gift", solid(), scale(0.35), area()],
+    "l": () => [sprite("lightning-blue"), "lightning-blue", "gift", solid(), scale(0.2), area()],
+    "%": () => [sprite("mystery-box2"), "present-surprise", "surprise-box", solid(), scale(0.35), area()],
+    "*": () => [sprite("mystery-box2"), "candy-cane-surprise", "surprise-box", solid(), scale(0.35), area()],
+    "z": () => [sprite("mystery-box2"), "lightning-surprise", "surprise-box", solid(), scale(0.35), area()],
+    "}": () => [sprite("unboxed"), solid(), scale(0.35), area()],
+    "|": () => [sprite("lamp-post"), "post", area(), solid()],
+    "^": () => [sprite("bunny-enemy"), "b-enemy", solid(), scale(0.2), area()],
+    "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
+    "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
+    "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
+    "t": () => [sprite("tree"), "ground", solid(), scale(0.45), area()]
+  };
   scene("game", () => {
+    var _a, _b;
     layer(["obj", "ui"], "obj");
+    let args = {};
+    const MOVE_SPEED = 200;
+    const JUMP_FORCE = 580;
+    const BIG_JUMP_FORCE = 850;
+    const MAGIC_SPEED = 400;
+    const ENEMY_SPEED = 40;
+    const FALL_DEATH = 600;
+    const LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
+    const SCORE_GLOBAL2 = (_b = args.score) != null ? _b : 0;
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
     let isJumping = true;
-    const maps = [
-      [
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                     =z            ",
-        "                                   ",
-        "            =*=%=                  ",
-        "                                   ",
-        "      ==                           ",
-        "t                                tt",
-        "                             |     ",
-        "                   ^    ^          ",
-        "                                   ",
-        "===============================  =="
-      ],
-      [
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "                          =%       ",
-        "                                   ",
-        "                                   ",
-        "                                   ",
-        "            _*_z_                  ",
-        "                                   ",
-        "       __                          ",
-        "t                                tt",
-        "                             |     ",
-        "                   ^    ^          ",
-        "                                   ",
-        "_______________________________  __"
-      ]
-    ];
-    const levelCfg = {
-      width: 20,
-      height: 20,
-      "=": () => [sprite("block-4"), "ground", solid(), scale(0.35), area()],
-      "$": () => [sprite("present"), "green-present", "gift", solid(), scale(0.9), area()],
-      "j": () => [sprite("candy-cane2"), "candy-cane", "gift", solid(), scale(0.35), area()],
-      "l": () => [sprite("lightning-blue"), "lightning-blue", "gift", solid(), scale(0.2), area()],
-      "%": () => [sprite("mystery-box2"), "present-surprise", "surprise-box", solid(), scale(0.35), area()],
-      "*": () => [sprite("mystery-box2"), "candy-cane-surprise", "surprise-box", solid(), scale(0.35), area()],
-      "z": () => [sprite("mystery-box2"), "lightning-surprise", "surprise-box", solid(), scale(0.35), area()],
-      "}": () => [sprite("unboxed"), solid(), scale(0.35), area()],
-      "|": () => [sprite("lamp-post"), "post", area(), solid()],
-      "^": () => [sprite("bunny-enemy"), "b-enemy", solid(), scale(0.2), area()],
-      "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
-      "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
-      "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
-      "t": () => [sprite("tree"), "ground", solid(), scale(0.45), area()]
-    };
     const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
     const score = add([
-      text(SCORE_GLOBAL),
+      text(SCORE_GLOBAL2),
       pos(20, 6),
       layer("ui"),
       {
-        value: SCORE_GLOBAL
+        value: SCORE_GLOBAL2
       },
       scale(0.3)
     ]);
-    add([text("level " + parseInt(LEVEL_INDEX + 1)), pos(50, 6), scale(0.3)]);
+    const level = add([
+      text("level " + parseInt(LEVEL_INDEX)),
+      pos(50, 6),
+      {
+        value: LEVEL_INDEX
+      },
+      scale(0.3)
+    ]);
     const player = add([sprite("santa"), pos(50, 0), area(), body(), big(), scale(0.65)]);
     player.action(() => {
       camPos(player.pos);
       if (player.pos.y >= FALL_DEATH) {
-        go("lose");
+        go("lose", {
+          score: score.value
+        });
       }
     });
     keyDown("left", () => {
@@ -2955,6 +2940,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       gameLevel.spawn("=", l.gridPos.sub(0, 0));
       destroy(m);
     });
+    onCollide("magic", "block", (m, b) => {
+      destroy(m);
+    });
     player.onCollide("lightning-blue", (b) => {
       player.biggify(7);
       destroy(b);
@@ -2982,8 +2970,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       }
     });
     player.onCollide("post", (p) => {
+      level.value++;
+      console.log(level.value);
       go("game", {
-        level: LEVEL_INDEX + 1,
+        level: level.value,
         score: score.value
       });
     });
@@ -2996,5 +2986,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(1)
     ]);
   });
+  go("game");
 })();
 //# sourceMappingURL=game.js.map
