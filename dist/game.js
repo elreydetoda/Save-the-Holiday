@@ -2731,7 +2731,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }, "default");
 
   // code/main.js
-  Es();
+  Es({ background: [0, 0, 0] });
   loadSprite("santa", "sprites/santa.png");
   loadSprite("mystery-box", "sprites/mystery-box.png");
   loadSprite("mystery-box2", "sprites/mystery-box2.png");
@@ -2753,6 +2753,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("tree", "sprites/tree.png");
   loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
   loadSprite("lamp-post", "sprites/lamp-post.png");
+  layers(["obj", "ui"], "obj");
   var map = [
     "                                   ",
     "                                   ",
@@ -2765,8 +2766,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "    %      =*=%=                   ",
     "                                   ",
     "                                   ",
-    "                                   ",
-    "t                            |   tt",
+    "t                                tt",
+    "                             |     ",
     "                   ^    ^          ",
     "                                   ",
     "===============================  =="
@@ -2774,19 +2775,36 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var levelCfg = {
     width: 20,
     height: 20,
-    "=": () => [sprite("block-4"), "ground", scale(0.35), area()],
+    "=": () => [sprite("block-4"), "ground", solid(), scale(0.35), area()],
     "$": () => [sprite("present")],
-    "%": () => [sprite("mystery-box2"), "present-surprise", scale(0.35), area()],
-    "*": () => [sprite("mystery-box2"), "candy-cane-surprise", scale(0.35), area()],
+    "%": () => [sprite("mystery-box2"), "present-surprise", solid(), scale(0.35), area()],
+    "*": () => [sprite("mystery-box2"), "candy-cane-surprise", solid(), scale(0.35), area()],
     "}": () => [sprite("unboxed")],
     "|": () => [sprite("lamp-post"), "post", area()],
-    "^": () => [sprite("bunny-enemy"), "enemy", scale(0.2), area()],
+    "^": () => [sprite("bunny-enemy"), "enemy", solid(), scale(0.2), area()],
     "#": () => [sprite("block-4"), "ground", scale(0.35), area()],
     "-": () => [sprite("block-2"), "ground", scale(0.35), area()],
     "_": () => [sprite("block-3"), "ground", scale(0.35), area()],
     "x": () => [sprite("block-5"), "ground", scale(0.35), area()],
-    "t": () => [sprite("tree"), "ground", scale(0.35), area()]
+    "t": () => [sprite("tree"), "ground", scale(0.45), area()]
   };
   addLevel(map, levelCfg);
+  var scoreLabel = add[text("0"), pos(30, 6), layer("ui"), {
+    value: "0"
+  }];
+  add([text("level 0"), pos(40, 6), scale(0.3)]);
+  var player = add([sprite("santa"), pos(30, 0), area(), body(), scale(0.65)]);
+  var MOVE_SPEED = 200;
+  keyDown("left", () => {
+    player.move(-MOVE_SPEED, 0);
+  });
+  keyDown("right", () => {
+    player.move(MOVE_SPEED, 0);
+  });
+  var JUMP_FORCE = 510;
+  keyPress("up", () => {
+    if (player.grounded())
+      player.jump(JUMP_FORCE);
+  });
 })();
 //# sourceMappingURL=game.js.map

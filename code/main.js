@@ -1,7 +1,7 @@
 import kaboom from "kaboom";
 
 // initialize context
-kaboom();
+kaboom({background: [0, 0, 0]});
 
 // load assets
 loadSprite("santa", "sprites/santa.png");
@@ -26,6 +26,9 @@ loadSprite("tree", "sprites/tree.png");
 loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
 loadSprite("lamp-post", "sprites/lamp-post.png");
 
+// add layers
+layers(['obj', 'ui'], 'obj')
+
 // map creation
 const map = [
 '                                   ',
@@ -39,8 +42,8 @@ const map = [
 '    %      =*=%=                   ',
 '                                   ',
 '                                   ',
-'                                   ',
-'t                            |   tt',
+'t                                tt',
+'                             |     ',
 '                   ^    ^          ',
 '                                   ',
 '===============================  ==',
@@ -49,18 +52,52 @@ const map = [
 const levelCfg = {
   width: 20,
   height: 20,
-  '=': () => [sprite('block-4'), 'ground', scale(0.35), area()],
+  '=': () => [sprite('block-4'), 'ground', solid(), scale(0.35), area()],
   '$': () => [sprite('present')],
-  '%': () => [sprite('mystery-box2'), 'present-surprise', scale(0.35), area()],
-  '*': () => [sprite('mystery-box2'), 'candy-cane-surprise', scale(0.35), area()],
+  '%': () => [sprite('mystery-box2'), 'present-surprise', solid(), scale(0.35), area()],
+  '*': () => [sprite('mystery-box2'), 'candy-cane-surprise', solid(), scale(0.35), area()],
   '}': () => [sprite('unboxed')],
   '|': () => [sprite('lamp-post'),'post', area()],
-  '^': () => [sprite('bunny-enemy'), 'enemy', scale(0.2), area()],
+  '^': () => [sprite('bunny-enemy'), 'enemy', solid(), scale(0.2), area()],
   '#': () => [sprite('block-4'), 'ground', scale(0.35), area()],
   '-': () => [sprite('block-2'), 'ground', scale(0.35), area()],
   '_': () => [sprite('block-3'), 'ground', scale(0.35), area()],
   'x': () => [sprite('block-5'), 'ground', scale(0.35), area()],
-  't': () => [sprite('tree'), 'ground', scale(0.35), area()],
+  't': () => [sprite('tree'), 'ground', scale(0.45), area()],
 }
 
 addLevel(map, levelCfg)
+
+// TO-DO: add a score
+const scoreLabel = add[(
+  text('0'),
+  pos(30,6),
+  layer('ui'),
+  {
+    value: '0',  
+  },
+)]
+
+// add level numbers
+add([text('level ' + '0'), pos(40,6), scale(0.3)])
+
+// add player
+const player = add([sprite('santa'), pos(30,0), area(), body(), scale(.65)])
+
+// move speeds
+const MOVE_SPEED = 200
+
+// keystroke events
+keyDown('left', () => {
+  player.move(-MOVE_SPEED, 0)
+})
+
+keyDown('right', () => {
+  player.move(MOVE_SPEED, 0)
+})
+
+const JUMP_FORCE = 510
+keyPress('up', () => {
+  if(player.grounded())
+  player.jump(JUMP_FORCE)
+})
