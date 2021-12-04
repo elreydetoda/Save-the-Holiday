@@ -27,7 +27,11 @@ loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
 loadSprite("lamp-post", "sprites/lamp-post.png");
 
 // add layers
-layers(['obj', 'ui'], 'obj')
+layer(['obj', 'ui'], 'obj')
+
+// constants
+const MOVE_SPEED = 200
+const JUMP_FORCE = 510
 
 // map creation
 const map = [
@@ -66,7 +70,7 @@ const levelCfg = {
   't': () => [sprite('tree'), 'ground', scale(0.45), area()],
 }
 
-addLevel(map, levelCfg)
+const gameLevel = addLevel(map, levelCfg)
 
 // TO-DO: add a score
 const scoreLabel = add[(
@@ -75,7 +79,7 @@ const scoreLabel = add[(
   layer('ui'),
   {
     value: '0',  
-  },
+  }
 )]
 
 // add level numbers
@@ -83,9 +87,6 @@ add([text('level ' + '0'), pos(40,6), scale(0.3)])
 
 // add player
 const player = add([sprite('santa'), pos(30,0), area(), body(), scale(.65)])
-
-// move speeds
-const MOVE_SPEED = 200
 
 // keystroke events
 keyDown('left', () => {
@@ -96,8 +97,13 @@ keyDown('right', () => {
   player.move(MOVE_SPEED, 0)
 })
 
-const JUMP_FORCE = 510
 keyPress('up', () => {
   if(player.grounded())
   player.jump(JUMP_FORCE)
+})
+
+player.on('headbump', (obj) => {
+  if(obj.is('present-surprise')) {
+    gameLevel.spawn('$', obj.gridPos.sub(0,1))
+  }
 })

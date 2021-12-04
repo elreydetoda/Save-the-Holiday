@@ -2753,7 +2753,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("tree", "sprites/tree.png");
   loadSprite("sharp-spike1", "sprites/sharp-spike1.png");
   loadSprite("lamp-post", "sprites/lamp-post.png");
-  layers(["obj", "ui"], "obj");
+  layer(["obj", "ui"], "obj");
+  var MOVE_SPEED = 200;
+  var JUMP_FORCE = 510;
   var map = [
     "                                   ",
     "                                   ",
@@ -2788,23 +2790,26 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "x": () => [sprite("block-5"), "ground", scale(0.35), area()],
     "t": () => [sprite("tree"), "ground", scale(0.45), area()]
   };
-  addLevel(map, levelCfg);
+  var gameLevel = addLevel(map, levelCfg);
   var scoreLabel = add[text("0"), pos(30, 6), layer("ui"), {
     value: "0"
   }];
   add([text("level 0"), pos(40, 6), scale(0.3)]);
   var player = add([sprite("santa"), pos(30, 0), area(), body(), scale(0.65)]);
-  var MOVE_SPEED = 200;
   keyDown("left", () => {
     player.move(-MOVE_SPEED, 0);
   });
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0);
   });
-  var JUMP_FORCE = 510;
   keyPress("up", () => {
     if (player.grounded())
       player.jump(JUMP_FORCE);
+  });
+  player.on("headbump", (obj) => {
+    if (obj.is("present-surprise")) {
+      gameLevel.spawn("$", obj.gridPos.sub(0, 1));
+    }
   });
 })();
 //# sourceMappingURL=game.js.map
