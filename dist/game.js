@@ -2824,9 +2824,15 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0);
   });
+  player.action(() => {
+    if (player.grounded()) {
+      isJumping = false;
+    }
+  });
   keyPress("space", () => {
     if (player.grounded())
-      player.jump(CURRENT_JUMP_FORCE);
+      isJumping = true;
+    player.jump(CURRENT_JUMP_FORCE);
   });
   keyDown("up", () => {
     spawnMagic(player.pos.add(0, -35));
