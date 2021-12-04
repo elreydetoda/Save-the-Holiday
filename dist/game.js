@@ -2759,6 +2759,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("arrowUp", "sprites/arrowUp.png");
   loadPedit("magic", "sprites/magic.pedit");
   loadSprite("lightning-blue", "sprites/lightning-blue.png");
+  var args = {};
   scene("lose", () => {
     add([
       text("Game Over"),
@@ -2774,6 +2775,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var MAGIC_SPEED = 400;
   var ENEMY_SPEED = 50;
   var FALL_DEATH = 600;
+  var _a;
+  var LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
+  var _a2;
+  var SCORE_GLOBAL = (_a2 = args.score) != null ? _a2 : 0;
   var CURRENT_JUMP_FORCE = JUMP_FORCE;
   var isJumping = true;
   var maps = [
@@ -2832,11 +2837,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
     "t": () => [sprite("tree"), "ground", solid(), scale(0.45), area()]
   };
-  var gameLevel = addLevel(maps[1], levelCfg);
-  var score = add[text("0"), pos(30, 6), layer("ui"), {
-    value: 0
-  }];
-  add([text("level 0"), pos(40, 6), scale(0.3)]);
+  var gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
+  var score = add([
+    text(SCORE_GLOBAL),
+    pos(30, 6),
+    layer("ui"),
+    {
+      value: SCORE_GLOBAL
+    }
+  ]);
+  add([text("level " + parseInt(LEVEL_INDEX + 1)), pos(40, 6), scale(0.3)]);
   var player = add([sprite("santa"), pos(30, 0), area(), body(), big(), scale(0.65)]);
   player.action(() => {
     camPos(player.pos);
@@ -2934,18 +2944,31 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   player.onCollide("green-present", (g) => {
     destroy(g);
+    score.value++;
+    score.text = score.value;
+    console.log(score);
   });
   player.onCollide("candy-cane", (c2) => {
     destroy(c2);
+    score.value++;
+    score.text = score.value;
+    console.log(score);
   });
   player.onCollide("b-enemy", (b) => {
     if (isJumping) {
       destroy(b);
     } else {
-      go("lose");
+      go("lose", {
+        level: LEVEL_INDEX,
+        score: score.value
+      });
     }
   });
   player.onCollide("post", (p) => {
+    go("main", {
+      level: LEVEL_INDEX + 1,
+      score: score.value
+    });
   });
 })();
 //# sourceMappingURL=game.js.map

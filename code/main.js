@@ -35,6 +35,8 @@ loadSprite("lightning-blue", "sprites/lightning-blue.png");
 /* --------------- SCENES -----------------*/
 // win scene
 
+let args = {}
+
 // lose scene  
 scene('lose', () => {
   add([
@@ -55,6 +57,8 @@ const BIG_JUMP_FORCE = 850
 const MAGIC_SPEED = 400
 const ENEMY_SPEED = 50
 const FALL_DEATH = 600
+const LEVEL_INDEX = args.level ?? 0 
+const SCORE_GLOBAL = args.score ?? 0
 
 // variables
 let CURRENT_JUMP_FORCE = JUMP_FORCE
@@ -118,20 +122,20 @@ const levelCfg = {
   't': () => [sprite('tree'), 'ground', solid(), scale(0.45), area()],
 }
 
-const gameLevel = addLevel(maps[1], levelCfg)
+const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
 
-// TO-DO: add a score
-const score = add[(
-  text('0'),
+// add a score
+const score = add([
+  text(SCORE_GLOBAL),
   pos(30,6),
   layer('ui'),
   {
-    value: 0,  
+    value: SCORE_GLOBAL,  
   }
-)]
+])
 
 // add level numbers
-add([text('level ' + '0'), pos(40,6), scale(0.3)])
+add([text('level ' + parseInt(LEVEL_INDEX + 1)), pos(40,6), scale(0.3)])
 
 // add player
 const player = add([sprite('santa'), pos(30,0), area(), body(), big(), scale(.65)])
@@ -260,17 +264,17 @@ player.onCollide('lightning-blue', (b) => {
 // green present
 player.onCollide('green-present', (g) => {
   destroy(g)
-  // score.value++
-  // score.text = score.value
-  // console.log(score)
+  score.value++
+  score.text = score.value
+  console.log(score)
 })
 
 // candy cane
 player.onCollide('candy-cane', (c) => {
   destroy(c)
-  // score.value++
-  // score.text = score.value
-  // console.log(score)
+  score.value++
+  score.text = score.value
+  console.log(score)
 })
 
 // bunny enemies
@@ -278,14 +282,17 @@ player.onCollide('b-enemy', (b) => {
   if (isJumping) {
     destroy(b)
   } else {
-    go('lose') //, score:scoreLabel.value)
+    go('lose', {
+      level: (LEVEL_INDEX),
+      score: score.value
+    })
   }
 })
 
 // lamp post 
 player.onCollide('post', (p) => {
-  // go('game', {
-  //   level: (level + 1)
-  //   // score: score.value
-  // })
+  go('main', {
+    level: (LEVEL_INDEX + 1),
+    score: score.value
+  })
 })
