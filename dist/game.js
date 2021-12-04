@@ -2770,29 +2770,49 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   layer(["obj", "ui"], "obj");
   var MOVE_SPEED = 200;
   var JUMP_FORCE = 580;
-  var BIG_JUMP_FORCE = 750;
+  var BIG_JUMP_FORCE = 850;
   var MAGIC_SPEED = 400;
   var ENEMY_SPEED = 50;
   var FALL_DEATH = 600;
   var CURRENT_JUMP_FORCE = JUMP_FORCE;
   var isJumping = true;
-  var map = [
-    "                                   ",
-    "                                   ",
-    "                                   ",
-    "                                   ",
-    "                                   ",
-    "                                   ",
-    "                     =z            ",
-    "                                   ",
-    "            =*=%=                  ",
-    "                                   ",
-    "      ==                           ",
-    "t                                tt",
-    "                             |     ",
-    "                   ^    ^          ",
-    "                                   ",
-    "===============================  =="
+  var maps = [
+    [
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                     =z            ",
+      "                                   ",
+      "            =*=%=                  ",
+      "                                   ",
+      "      ==                           ",
+      "t                                tt",
+      "                             |     ",
+      "                   ^    ^          ",
+      "                                   ",
+      "===============================  =="
+    ],
+    [
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "                          =%       ",
+      "                                   ",
+      "                                   ",
+      "                                   ",
+      "            _*_z_                  ",
+      "                                   ",
+      "       __                          ",
+      "t                                tt",
+      "                             |     ",
+      "                   ^    ^          ",
+      "                                   ",
+      "_______________________________  __"
+    ]
   ];
   var levelCfg = {
     width: 20,
@@ -2807,13 +2827,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "}": () => [sprite("unboxed"), solid(), scale(0.35), area()],
     "|": () => [sprite("lamp-post"), "post", area(), solid()],
     "^": () => [sprite("bunny-enemy"), "b-enemy", solid(), scale(0.2), area()],
-    "#": () => [sprite("block-4"), "ground", scale(0.35), area()],
-    "-": () => [sprite("block-2"), "ground", scale(0.35), area()],
-    "_": () => [sprite("block-3"), "ground", scale(0.35), area()],
-    "x": () => [sprite("block-5"), "ground", scale(0.35), area()],
-    "t": () => [sprite("tree"), "ground", scale(0.45), area()]
+    "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
+    "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
+    "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
+    "t": () => [sprite("tree"), "ground", solid(), scale(0.45), area()]
   };
-  var gameLevel = addLevel(map, levelCfg);
+  var gameLevel = addLevel(maps[1], levelCfg);
   var score = add[text("0"), pos(30, 6), layer("ui"), {
     value: 0
   }];

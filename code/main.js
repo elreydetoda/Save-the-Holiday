@@ -51,7 +51,7 @@ layer(['obj', 'ui'], 'obj')
 // constants
 const MOVE_SPEED = 200
 const JUMP_FORCE = 580
-const BIG_JUMP_FORCE = 750
+const BIG_JUMP_FORCE = 850
 const MAGIC_SPEED = 400
 const ENEMY_SPEED = 50
 const FALL_DEATH = 600
@@ -84,18 +84,18 @@ const maps = [
   '                                   ',
   '                                   ',
   '                                   ',
+  '                          =%       ',
   '                                   ',
   '                                   ',
-  '                     =z            ',
   '                                   ',
-  '            =*=%=                  ',
+  '            _*_z_                  ',
   '                                   ',
-  '      ==                           ',
+  '       __                          ',
   't                                tt',
   '                             |     ',
   '                   ^    ^          ',
   '                                   ',
-  '===============================  ==',
+  '_______________________________  __',
   ],
   ]
 
@@ -112,14 +112,13 @@ const levelCfg = {
   '}': () => [sprite('unboxed'), solid(), scale(0.35), area()],
   '|': () => [sprite('lamp-post'),'post', area(), solid()],
   '^': () => [sprite('bunny-enemy'), 'b-enemy', solid(), scale(0.2), area()],
-  '#': () => [sprite('block-4'), 'ground', scale(0.35), area()],
-  '-': () => [sprite('block-2'), 'ground', scale(0.35), area()],
-  '_': () => [sprite('block-3'), 'ground', scale(0.35), area()],
-  'x': () => [sprite('block-5'), 'ground', scale(0.35), area()],
-  't': () => [sprite('tree'), 'ground', scale(0.45), area()],
+  '-': () => [sprite('block-2'), 'ground', solid(), scale(0.35), area()],
+  '_': () => [sprite('block-3'), 'ground', solid(), scale(0.35), area()],
+  'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35), area()],
+  't': () => [sprite('tree'), 'ground', solid(), scale(0.45), area()],
 }
 
-const gameLevel = addLevel(maps[0], levelCfg)
+const gameLevel = addLevel(maps[1], levelCfg)
 
 // TO-DO: add a score
 const score = add[(
