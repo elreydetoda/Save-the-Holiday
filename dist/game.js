@@ -2773,6 +2773,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var BIG_JUMP_FORCE = 750;
   var MAGIC_SPEED = 400;
   var ENEMY_SPEED = 50;
+  var FALL_DEATH = 600;
   var CURRENT_JUMP_FORCE = JUMP_FORCE;
   var isJumping = true;
   var map = [
@@ -2818,6 +2819,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }];
   add([text("level 0"), pos(40, 6), scale(0.3)]);
   var player = add([sprite("santa"), pos(30, 0), area(), body(), big(), scale(0.65)]);
+  player.action(() => {
+    camPos(player.pos);
+    if (player.pos.y >= FALL_DEATH) {
+      go("lose");
+    }
+  });
   keyDown("left", () => {
     player.move(-MOVE_SPEED, 0);
   });

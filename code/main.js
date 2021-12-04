@@ -54,6 +54,7 @@ const JUMP_FORCE = 580
 const BIG_JUMP_FORCE = 750
 const MAGIC_SPEED = 400
 const ENEMY_SPEED = 50
+const FALL_DEATH = 600
 
 // variables
 let CURRENT_JUMP_FORCE = JUMP_FORCE
@@ -116,6 +117,15 @@ add([text('level ' + '0'), pos(40,6), scale(0.3)])
 
 // add player
 const player = add([sprite('santa'), pos(30,0), area(), body(), big(), scale(.65)])
+
+// add camera movement
+player.action(() => {
+  camPos(player.pos)
+  if(player.pos.y >= FALL_DEATH) {
+    go('lose') //, score:scoreLabel.value)
+  }
+})
+
 
 // keystroke events
 keyDown('left', () => {
