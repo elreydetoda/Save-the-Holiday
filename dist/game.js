@@ -2761,40 +2761,40 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("lightning-blue", "sprites/lightning-blue.png");
   var maps = [
     [
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                     =z            ",
-      "                                   ",
-      "            =*=%=                  ",
-      "                                   ",
-      "      ==                           ",
-      "t                                tt",
-      "                             |     ",
-      "                   ^    ^          ",
-      "                                   ",
-      "===============================  =="
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                     =z                ",
+      "                                       ",
+      "            =*=%=                      ",
+      "                                       ",
+      "      ==                               ",
+      "t                           tt         ",
+      "                                      |",
+      "                   ^    ^              ",
+      "                                       ",
+      "===============================  ======"
     ],
     [
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "                          =%       ",
-      "                                   ",
-      "                                   ",
-      "                                   ",
-      "            _*_z_                  ",
-      "                                   ",
-      "       __                          ",
-      "t                                tt",
-      "                             |     ",
-      "                   ^    ^          ",
-      "                                   ",
-      "_______________________________  __"
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "                          =%           ",
+      "                                       ",
+      "                                       ",
+      "                                       ",
+      "            _*_z_                      ",
+      "                                       ",
+      "       __                              ",
+      "f                           tt         ",
+      "                                  |    ",
+      "                   ^    ^              ",
+      "                                       ",
+      "_______________________________  ______"
     ]
   ];
   var levelCfg = {
@@ -2813,7 +2813,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
     "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
-    "t": () => [sprite("tree"), "ground", solid(), scale(0.45), area()]
+    "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
+    "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()]
   };
   scene("game", () => {
     var _a, _b;
@@ -2828,6 +2829,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     const LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
     const SCORE_GLOBAL2 = (_b = args.score) != null ? _b : 0;
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
+    let CURRENT_E_SPEED = -ENEMY_SPEED;
     let isJumping = true;
     const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
     const score = add([
@@ -2893,7 +2895,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       }
     });
     onUpdate("b-enemy", (b) => {
-      b.move(-ENEMY_SPEED, 0);
+      b.move(CURRENT_E_SPEED, 0);
     });
     function big() {
       let timer = 0;
@@ -2942,6 +2944,18 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     onCollide("magic", "block", (m, b) => {
       destroy(m);
+    });
+    onCollide("b-enemy", "left-tree", (b, l) => {
+      CURRENT_E_SPEED = ENEMY_SPEED;
+      every("b-enemy", (b2) => {
+        b2.move(CURRENT_E_SPEED, 0);
+      });
+    });
+    onCollide("b-enemy", "right-tree", (b, r) => {
+      CURRENT_E_SPEED = -ENEMY_SPEED;
+      every("b-enemy", (b2) => {
+        b2.move(CURRENT_E_SPEED, 0);
+      });
     });
     player.onCollide("lightning-blue", (b) => {
       player.biggify(7);
