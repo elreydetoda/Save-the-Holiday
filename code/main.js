@@ -181,7 +181,8 @@ scene('game', () => {
     {
       value: SCORE_GLOBAL,  
     }, 
-    scale(.3)
+    scale(.3),
+    fixed()
   ])
 
   // add level numbers
@@ -191,7 +192,8 @@ scene('game', () => {
     {
       value: LEVEL_INDEX,
     },
-    scale(0.3)
+    scale(0.3),
+    fixed()
   ])
 
   // add player
