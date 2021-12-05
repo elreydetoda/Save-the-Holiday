@@ -55,7 +55,7 @@ loadSprite("play-button", "sprites/play-button.png");
 loadSprite("instructions", "sprites/instructions.png");
 loadSprite("win-scene", "sprites/win-scene.png");
 loadSprite("lose-scene", "sprites/lose-scene.png");
-loadPedit("enemy", "sprites/enemy.pedit");
+// loadPedit("enemy", "sprites/enemy.pedit");
 
 // load sounds
 loadSound("collectGift", "sounds/collectGift.mp3");
