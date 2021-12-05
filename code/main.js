@@ -78,7 +78,7 @@ loadSound("jumpOnEnemy", "sounds/jumpOnEnemy.ogg");
 loadSound("introMusic", "sounds/introMusic.mp3");
 loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
 loadSound("winScene", "sounds/winScene.mp3");
-loadSound("skrink", "sounds/skrink.mp3");
+loadSound("shrink", "sounds/shrink.mp3");
 
 
 
@@ -133,7 +133,7 @@ loadSound("skrink", "sounds/skrink.mp3");
     '              w          -*-           ',
     '                                       ',
     '                                 w     ',
-    '                                       ',
+    '                    w                   ',
     '                     -%-%-              ',
     '                                       ',
     '       --                              ',
@@ -159,8 +159,8 @@ loadSound("skrink", "sounds/skrink.mp3");
     '|': () => [sprite('lamp-post'),'post', area(), solid()],
     '^': () => [sprite('bunny-enemy'), 'b-enemy', 'bleft', solid(), scale(0.2), area(), body()],
     'b': () => [sprite('bunny-enemy'), 'b-enemy', 'bright', solid(), scale(0.2), area(), body()],
-    '-': () => [sprite('block-2'), 'ground', solid(), scale(0.35), area()],
-    '_': () => [sprite('block-3'), 'ground', solid(), scale(0.35), area()],
+    '-': () => [sprite('block-2'), 'ground', 'melting', solid(), scale(0.35), area()],
+    '_': () => [sprite('block-3'), 'ground', 'melting', solid(), scale(0.35), area()],
     'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35), area()],
     't': () => [sprite('tree'), 'right-tree', solid(), scale(0.45), area()],
     'f': () => [sprite('tree'), 'left-tree', solid(), scale(0.45), area()],
@@ -198,7 +198,9 @@ scene('menu', () => {
   ])
 
   onClick('play', (p) => {
-    play('mouseClick')
+    play('mouseClick', {
+      volume:0.8,
+    })
     go('game')
   })
 
@@ -218,7 +220,7 @@ scene('game', () => {
 
   // gameplay music
   gameplayMusic = play("gameplay", {
-      volume: 0.8,
+      volume: 0.3,
       loop: true
   })
 
@@ -272,7 +274,9 @@ scene('game', () => {
   player.onUpdate(() => {
     camPos(player.pos)
     if(player.pos.y >= FALL_DEATH) {
-      play('fallOff')
+      play('fallOff', {
+      volume:0.8,
+      })
       go('lose', {
         score: SCORE_GLOBAL
       })
@@ -305,7 +309,9 @@ scene('game', () => {
   })
 
   keyDown('s', () => {
-    play('shoot')
+    play('shoot', {
+      volume:0.8,
+    })
     spawnSnowBall(player.pos.add(0, -35))
   })
 
@@ -388,14 +394,18 @@ scene('game', () => {
         return isBig
       },
       smallify() {
-        play('shrink')
+        play('shrink', {
+          volume:0.8,
+        })
         this.scale = vec2(.65)
         timer = 0
         isBig = false
         CURRENT_JUMP_FORCE = JUMP_FORCE
       },
       biggify(time) {
-        play('grow')
+        play('grow', {
+          volume:0.5,
+        })
         this.scale = vec2(1)
         timer = time
         isBig = true
@@ -409,7 +419,9 @@ scene('game', () => {
   // -- magic collides with boxes -- 
   // surprise box - green present 
   onCollide('magic', 'present-surprise', (m, p) => {
-    play('giftReveal')
+    play('giftReveal', {
+      volume:0.5,
+    })
     gameLevel.spawn('$', p.gridPos.sub(1,2))
     gameLevel.spawn('=', p.gridPos.sub(0,0))
     destroy(m)
@@ -417,7 +429,9 @@ scene('game', () => {
 
   // surprise box - candy cane
   onCollide('magic', 'candy-cane-surprise', (m, c) => {
-    play('giftReveal')
+    play('giftReveal', {
+      volume:0.5,
+    })
     gameLevel.spawn('j', c.gridPos.sub(0,1))
     gameLevel.spawn('=', c.gridPos.sub(0,0))
     destroy(m)
@@ -425,7 +439,9 @@ scene('game', () => {
 
   // surprise box - blue lightning
   onCollide('magic', 'lightning-surprise', (m, l) => {
-    play('giftReveal')
+    play('giftReveal', {
+      volume:0.5,
+    })
     gameLevel.spawn('l', l.gridPos.sub(0,1.5))
     gameLevel.spawn('=', l.gridPos.sub(0,0))
     destroy(m)
@@ -433,6 +449,17 @@ scene('game', () => {
     
   // regular block
   onCollide('magic', 'block', (m, b) => {
+    destroy(m)
+  })
+
+  // snowball restore melting snow box
+  onCollide('snowball', 'melting', (m, p) => {
+    play('hitWithSnowBall', {
+      volume:0.5,
+    })
+    gameLevel.spawn('=', p.gridPos.sub(0,0))
+    SCORE_GLOBAL+=15
+    score.text = SCORE_GLOBAL
     destroy(m)
   })
 
@@ -451,18 +478,22 @@ scene('game', () => {
 
   // green present
   player.onCollide('green-present', (g) => {
-    play(collectGift)
+    play('collectGift', {
+      volume:0.5,
+    })
     destroy(g)
-    SCORE_GLOBAL++
+    SCORE_GLOBAL+=10
     score.text = SCORE_GLOBAL
     console.log(score)
   })
 
   // candy cane
   player.onCollide('candy-cane', (c) => {
-    play(collectGift)
+    play('collectGift', {
+      volume:0.5,
+    })
     destroy(c)
-    SCORE_GLOBAL++
+    SCORE_GLOBAL+=10
     score.text = SCORE_GLOBAL
     console.log(score)
   })
@@ -470,10 +501,16 @@ scene('game', () => {
   // bunny enemies
   player.onCollide('b-enemy', (b) => {
     if (isJumping) {
-      play(jumpOnEnemy)
+      play('jumpOnEnemy', {
+      volume:0.9,
+      })
       destroy(b)
+      SCORE_GLOBAL+=5
+    score.text = SCORE_GLOBAL
     } else {
-      play('runIntoEnemy')
+      play('runIntoEnemy', {
+      volume:0.5,
+      })
       go('lose', {
         level: (LEVEL_INDEX),
         score: SCORE_GLOBAL
@@ -484,10 +521,16 @@ scene('game', () => {
   // sunbeam enemies
   player.onCollide('s-enemy', (s) => {
     if (isJumping) {
-      play(jumpOnEnemy)
+      play('jumpOnEnemy', {
+      volume:0.9,
+      })
       destroy(s)
+      SCORE_GLOBAL+=5
+    score.text = SCORE_GLOBAL
     } else {
-      play('runIntoEnemy')
+      play('runIntoEnemy', {
+      volume:0.5,
+      })
       go('lose', {
         level: (LEVEL_INDEX),
         score: SCORE_GLOBAL
@@ -498,14 +541,17 @@ scene('game', () => {
   // lamp post 
   player.onCollide('post', (p) => {
     LEVEL_INDEX++
-    console.log(level.value)
+    SCORE_GLOBAL+=100
+    score.text = SCORE_GLOBAL
     gameplayMusic.pause()
     if(LEVEL_INDEX > 2){
       go('win', {
         score: SCORE_GLOBAL
       })
     } else {
-      play('levelUp')
+      play('levelUp', {
+        volume:0.5,
+      })
         go('game', {
         level: level.value,
         score: SCORE_GLOBAL
@@ -550,7 +596,9 @@ scene('lose', () => {
     'play'
   ])
   onClick('play', (p) => {
-    play('mouseClick')
+    play('mouseClick', {
+      volume:0.8,
+    })
     LEVEL_INDEX = 0
     SCORE_GLOBAL = 0
     go('game')
@@ -564,7 +612,7 @@ scene('win', () => {
 
   // win scene music
   winMusic = play("winScene", {
-      volume: 0.8,
+      volume: 0.3,
       loop: true
   })
 
@@ -593,7 +641,9 @@ scene('win', () => {
     'play'
   ])
   onClick('play', (p) => {
-    play('mouseClick')
+    play('mouseClick', {
+      volume:0.8,
+    })
     LEVEL_INDEX = 0
     SCORE_GLOBAL = 0
     go('game')

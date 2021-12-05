@@ -2801,7 +2801,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSound("introMusic", "sounds/introMusic.mp3");
   loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
   loadSound("winScene", "sounds/winScene.mp3");
-  loadSound("skrink", "sounds/skrink.mp3");
+  loadSound("shrink", "sounds/shrink.mp3");
   layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
@@ -2847,8 +2847,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                       ",
       "              w          -*-           ",
       "                                       ",
-      "                        w         w     ",
-      "                                       ",
+      "                                 w     ",
+      "                    w                   ",
       "                     -%-%-              ",
       "                                       ",
       "       --                              ",
@@ -2873,8 +2873,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "|": () => [sprite("lamp-post"), "post", area(), solid()],
     "^": () => [sprite("bunny-enemy"), "b-enemy", "bleft", solid(), scale(0.2), area(), body()],
     "b": () => [sprite("bunny-enemy"), "b-enemy", "bright", solid(), scale(0.2), area(), body()],
-    "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
-    "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
+    "-": () => [sprite("block-2"), "ground", "melting", solid(), scale(0.35), area()],
+    "_": () => [sprite("block-3"), "ground", "melting", solid(), scale(0.35), area()],
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
     "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
     "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()],
@@ -2902,7 +2902,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       "play"
     ]);
-    onClick("play", (p) => go("game"));
+    onClick("play", (p) => {
+      play("mouseClick", {
+        volume: 0.8
+      });
+      go("game");
+    });
   });
   var loseMusic;
   var winMusic;
@@ -2915,7 +2920,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       winMusic.pause();
     }
     gameplayMusic = play("gameplay", {
-      volume: 0.8,
+      volume: 0.3,
       loop: true
     });
     layer(["obj", "ui"], "obj");
@@ -2953,6 +2958,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.onUpdate(() => {
       camPos(player.pos);
       if (player.pos.y >= FALL_DEATH) {
+        play("fallOff", {
+          volume: 0.8
+        });
         go("lose", {
           score: SCORE_GLOBAL
         });
@@ -2978,6 +2986,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       spawnMagic(player.pos.add(0, -35));
     });
     keyDown("s", () => {
+      play("shoot", {
+        volume: 0.8
+      });
       spawnSnowBall(player.pos.add(0, -35));
     });
     function spawnMagic(p) {
@@ -3042,12 +3053,18 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           return isBig;
         },
         smallify() {
+          play("shrink", {
+            volume: 0.8
+          });
           this.scale = vec2(0.65);
           timer = 0;
           isBig = false;
           CURRENT_JUMP_FORCE = JUMP_FORCE;
         },
         biggify(time) {
+          play("grow", {
+            volume: 0.5
+          });
           this.scale = vec2(1);
           timer = time;
           isBig = true;
@@ -3057,21 +3074,39 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     __name(big, "big");
     onCollide("magic", "present-surprise", (m, p) => {
+      play("giftReveal", {
+        volume: 0.5
+      });
       gameLevel.spawn("$", p.gridPos.sub(1, 2));
       gameLevel.spawn("=", p.gridPos.sub(0, 0));
       destroy(m);
     });
     onCollide("magic", "candy-cane-surprise", (m, c2) => {
+      play("giftReveal", {
+        volume: 0.5
+      });
       gameLevel.spawn("j", c2.gridPos.sub(0, 1));
       gameLevel.spawn("=", c2.gridPos.sub(0, 0));
       destroy(m);
     });
     onCollide("magic", "lightning-surprise", (m, l) => {
+      play("giftReveal", {
+        volume: 0.5
+      });
       gameLevel.spawn("l", l.gridPos.sub(0, 1.5));
       gameLevel.spawn("=", l.gridPos.sub(0, 0));
       destroy(m);
     });
     onCollide("magic", "block", (m, b) => {
+      destroy(m);
+    });
+    onCollide("snowball", "melting", (m, p) => {
+      play("hitWithSnowBall", {
+        volume: 0.5
+      });
+      gameLevel.spawn("=", p.gridPos.sub(0, 0));
+      SCORE_GLOBAL += 15;
+      score.text = SCORE_GLOBAL;
       destroy(m);
     });
     onCollide("s-enemy", "snowball", (e, s) => {
@@ -3082,21 +3117,35 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       destroy(b);
     });
     player.onCollide("green-present", (g) => {
+      play("collectGift", {
+        volume: 0.5
+      });
       destroy(g);
-      SCORE_GLOBAL++;
+      SCORE_GLOBAL += 10;
       score.text = SCORE_GLOBAL;
       console.log(score);
     });
     player.onCollide("candy-cane", (c2) => {
+      play("collectGift", {
+        volume: 0.5
+      });
       destroy(c2);
-      SCORE_GLOBAL++;
+      SCORE_GLOBAL += 10;
       score.text = SCORE_GLOBAL;
       console.log(score);
     });
     player.onCollide("b-enemy", (b) => {
       if (isJumping) {
+        play("jumpOnEnemy", {
+          volume: 0.9
+        });
         destroy(b);
+        SCORE_GLOBAL += 5;
+        score.text = SCORE_GLOBAL;
       } else {
+        play("runIntoEnemy", {
+          volume: 0.5
+        });
         go("lose", {
           level: LEVEL_INDEX,
           score: SCORE_GLOBAL
@@ -3105,8 +3154,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     player.onCollide("s-enemy", (s) => {
       if (isJumping) {
+        play("jumpOnEnemy", {
+          volume: 0.9
+        });
         destroy(s);
+        SCORE_GLOBAL += 5;
+        score.text = SCORE_GLOBAL;
       } else {
+        play("runIntoEnemy", {
+          volume: 0.5
+        });
         go("lose", {
           level: LEVEL_INDEX,
           score: SCORE_GLOBAL
@@ -3115,13 +3172,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     player.onCollide("post", (p) => {
       LEVEL_INDEX++;
-      console.log(level.value);
+      SCORE_GLOBAL += 100;
+      score.text = SCORE_GLOBAL;
       gameplayMusic.pause();
       if (LEVEL_INDEX > 2) {
         go("win", {
           score: SCORE_GLOBAL
         });
       } else {
+        play("levelUp", {
+          volume: 0.5
+        });
         go("game", {
           level: level.value,
           score: SCORE_GLOBAL
@@ -3158,6 +3219,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "play"
     ]);
     onClick("play", (p) => {
+      play("mouseClick", {
+        volume: 0.8
+      });
       LEVEL_INDEX = 0;
       SCORE_GLOBAL = 0;
       go("game");
@@ -3166,7 +3230,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   scene("win", () => {
     gameplayMusic.pause();
     winMusic = play("winScene", {
-      volume: 0.8,
+      volume: 0.3,
       loop: true
     });
     add([
@@ -3192,6 +3256,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "play"
     ]);
     onClick("play", (p) => {
+      play("mouseClick", {
+        volume: 0.8
+      });
       LEVEL_INDEX = 0;
       SCORE_GLOBAL = 0;
       go("game");
