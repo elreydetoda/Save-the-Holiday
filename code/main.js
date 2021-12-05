@@ -467,7 +467,9 @@ scene('game', () => {
   // -- enemies collide with objects --
   // TO-DO: Change to box
   onCollide('s-enemy', 'snowball', (e, s) => {
+    play('hitWithSnowBall')
     destroy(e)
+    destroy(s)
   })
 
   // -- player collides with objects --
