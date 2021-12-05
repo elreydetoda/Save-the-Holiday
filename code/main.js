@@ -181,18 +181,18 @@ scene('game', () => {
     {
       value: SCORE_GLOBAL,  
     }, 
-    scale(.3),
+    scale(.4),
     fixed()
   ])
 
   // add level numbers
   const level = add([
     text('level ' + parseInt(LEVEL_INDEX)), 
-    pos(50,6), 
+    pos(70,6), 
     {
       value: LEVEL_INDEX,
     },
-    scale(0.3),
+    scale(0.4),
     fixed()
   ])
 
@@ -437,4 +437,4 @@ scene('win', () => {
   ])
 })
 
-go('lose')
+go('game')
