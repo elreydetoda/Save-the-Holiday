@@ -22,7 +22,7 @@ let LEVEL_INDEX = args.level ?? 0
 let SCORE_GLOBAL = args.score ?? 0
 
 
-// load assets
+// load sprites
 loadSprite("santa", "sprites/santa.png");
 loadSprite("mystery-box", "sprites/mystery-box.png");
 loadSprite("mystery-box2", "sprites/mystery-box2.png");
@@ -55,6 +55,30 @@ loadSprite("play-button", "sprites/play-button.png");
 loadSprite("instructions", "sprites/instructions.png");
 loadSprite("win-scene", "sprites/win-scene.png");
 loadSprite("lose-scene", "sprites/lose-scene.png");
+
+// load sounds
+loadSound("collectGift", "sounds/collectGift.mp3");
+loadSound("gameplay", "sounds/gameplay.mp3");
+loadSound("gameplay2", "sounds/gameplay2.mp3");
+loadSound("fallOff", "sounds/fallOff.mp3");
+loadSound("levelUp", "sounds/levelUp.mp3");
+loadSound("jumpOnEnemy", "sounds/jumpOnEnemy.ogg");
+loadSound("introMusic", "sounds/introMusic.mp3");
+loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
+loadSound("grow", "sounds/grow.mp3");
+loadSound("giftReveal", "sounds/giftReveal.mp3");
+loadSound("grow", "sounds/grow.mp3");
+loadSound("shoot", "sounds/shoot.ogg");
+loadSound("score", "sounds/score.mp3");
+loadSound("runIntoEnemy", "sounds/runIntoEnemy.mp3");
+loadSound("mouseClick", "sounds/mouseClick.mp3");
+loadSound("loseScene", "sounds/loseScene.mp3");
+loadSound("levelUp", "sounds/levelUp.mp3");
+loadSound("jumpOnEnemy", "sounds/jumpOnEnemy.ogg");
+loadSound("introMusic", "sounds/introMusic.mp3");
+loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
+loadSound("winScene", "sounds/winScene.mp3");
+loadSound("skrink", "sounds/skrink.mp3");
 
 
 
@@ -93,11 +117,11 @@ loadSprite("lose-scene", "sprites/lose-scene.png");
     '                ^                      ',
     '                                       ',
     '            _*_z_                      ',
-    '                                       ',
+    '         b                              ',
     '       __                              ',
     'f                           tt         ',
     '                                     | ',
-    '  b                       ^            ',
+    '                         ^            ',
     '                                       ',
     '_______________________________  ______',
     ],
@@ -143,8 +167,16 @@ loadSprite("lose-scene", "sprites/lose-scene.png");
     'w': () => [sprite('wingMan1'), 's-enemy', solid(), scale(0.3), area()],
   }
 
+let introMusic;
 // menu scene
 scene('menu', () => {
+  
+  // intro music
+  introMusic = play("introMusic", {
+    volume: 0.3,
+    loop: true
+  })
+
   // add background image (TO-DO: replace w/ instructions)
   add([
     sprite('instructions'),
@@ -169,8 +201,23 @@ scene('menu', () => {
 
 })
 
+let loseMusic, winMusic;
 // game scene
 scene('game', () => {
+
+  introMusic.pause()
+  if (loseMusic) {
+    loseMusic.pause()
+  }
+  if (winMusic) {
+    winMusic.pause()
+  }
+
+  // gameplay music
+  gameplayMusic = play("gameplay", {
+      volume: 0.8,
+      loop: true
+  })
 
   // add layers
   layer(['obj', 'ui'], 'obj')
@@ -385,23 +432,6 @@ scene('game', () => {
     destroy(e)
   })
 
-  // TO-DO: work on enemy movement & collisions
-  // // left tree
-  // onCollide('b-enemy', 'left-tree', () => {
-  //   CURRENT_E_SPEED = ENEMY_SPEED
-  //   every('b-enemy', (b) => {
-  //     b.move(CURRENT_E_SPEED,  0)
-  //   })
-  // })
-  
-  // // right tree
-  // onCollide('b-enemy', 'right-tree', (b, r) => {
-  //   CURRENT_E_SPEED = -ENEMY_SPEED
-  //   every('b-enemy', (b) => {
-  //     b.move(CURRENT_E_SPEED,  0)
-  //   })
-  // })
-
   // -- player collides with objects --
   // blue lightning
   player.onCollide('lightning-blue', (b) => {
@@ -453,6 +483,7 @@ scene('game', () => {
   player.onCollide('post', (p) => {
     LEVEL_INDEX++
     console.log(level.value)
+    gameplayMusic.pause()
     if(LEVEL_INDEX > 2){
       go('win', {
         score: SCORE_GLOBAL
@@ -468,6 +499,15 @@ scene('game', () => {
 
 // lose scene  
 scene('lose', () => {
+
+  gameplayMusic.pause()
+
+  // lose scene music
+  loseMusic = play("loseScene", {
+      volume: 0.3,
+      loop: true
+  })
+
   add([
     sprite('lose-scene'),
     layer('bg'),
@@ -492,11 +532,23 @@ scene('lose', () => {
     area(),
     'play'
   ])
-  onClick('play', (p) => go('game'))
+  onClick('play', (p) => {
+    loseMusic.pause()
+    go('game')
+    })
 })
 
 // win scene
 scene('win', () => {
+
+  gameplayMusic.pause()
+
+  // win scene music
+  winMusic = play("winScene", {
+      volume: 0.8,
+      loop: true
+  })
+
   add([
     sprite('win-scene'),
     layer('bg'),

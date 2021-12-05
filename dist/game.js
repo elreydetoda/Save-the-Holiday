@@ -2780,6 +2780,28 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("instructions", "sprites/instructions.png");
   loadSprite("win-scene", "sprites/win-scene.png");
   loadSprite("lose-scene", "sprites/lose-scene.png");
+  loadSound("collectGift", "sounds/collectGift.mp3");
+  loadSound("gameplay", "sounds/gameplay.mp3");
+  loadSound("gameplay2", "sounds/gameplay2.mp3");
+  loadSound("fallOff", "sounds/fallOff.mp3");
+  loadSound("levelUp", "sounds/levelUp.mp3");
+  loadSound("jumpOnEnemy", "sounds/jumpOnEnemy.ogg");
+  loadSound("introMusic", "sounds/introMusic.mp3");
+  loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
+  loadSound("grow", "sounds/grow.mp3");
+  loadSound("giftReveal", "sounds/giftReveal.mp3");
+  loadSound("grow", "sounds/grow.mp3");
+  loadSound("shoot", "sounds/shoot.ogg");
+  loadSound("score", "sounds/score.mp3");
+  loadSound("runIntoEnemy", "sounds/runIntoEnemy.mp3");
+  loadSound("mouseClick", "sounds/mouseClick.mp3");
+  loadSound("loseScene", "sounds/loseScene.mp3");
+  loadSound("levelUp", "sounds/levelUp.mp3");
+  loadSound("jumpOnEnemy", "sounds/jumpOnEnemy.ogg");
+  loadSound("introMusic", "sounds/introMusic.mp3");
+  loadSound("hitWithSnowBall", "sounds/hitWithSnowBall.mp3");
+  loadSound("winScene", "sounds/winScene.mp3");
+  loadSound("skrink", "sounds/skrink.mp3");
   layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
@@ -2810,11 +2832,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                ^                      ",
       "                                       ",
       "            _*_z_                      ",
-      "                                       ",
+      "         b                              ",
       "       __                              ",
       "f                           tt         ",
       "                                     | ",
-      "  b                       ^            ",
+      "                         ^            ",
       "                                       ",
       "_______________________________  ______"
     ],
@@ -2858,7 +2880,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()],
     "w": () => [sprite("wingMan1"), "s-enemy", solid(), scale(0.3), area()]
   };
+  var introMusic;
   scene("menu", () => {
+    introMusic = play("introMusic", {
+      volume: 0.3,
+      loop: true
+    });
     add([
       sprite("instructions"),
       layer("bg"),
@@ -2877,7 +2904,20 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     onClick("play", (p) => go("game"));
   });
+  var loseMusic;
+  var winMusic;
   scene("game", () => {
+    introMusic.pause();
+    if (loseMusic) {
+      loseMusic.pause();
+    }
+    if (winMusic) {
+      winMusic.pause();
+    }
+    gameplayMusic = play("gameplay", {
+      volume: 0.8,
+      loop: true
+    });
     layer(["obj", "ui"], "obj");
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
     let CURRENT_E_SPEED = -ENEMY_SPEED;
@@ -3076,6 +3116,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.onCollide("post", (p) => {
       LEVEL_INDEX++;
       console.log(level.value);
+      gameplayMusic.pause();
       if (LEVEL_INDEX > 2) {
         go("win", {
           score: SCORE_GLOBAL
@@ -3089,6 +3130,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
   });
   scene("lose", () => {
+    gameplayMusic.pause();
+    loseMusic = play("loseScene", {
+      volume: 0.3,
+      loop: true
+    });
     add([
       sprite("lose-scene"),
       layer("bg"),
@@ -3111,9 +3157,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       "play"
     ]);
-    onClick("play", (p) => go("game"));
+    onClick("play", (p) => {
+      loseMusic.pause();
+      go("game");
+    });
   });
   scene("win", () => {
+    gameplayMusic.pause();
+    winMusic = play("winScene", {
+      volume: 0.8,
+      loop: true
+    });
     add([
       sprite("win-scene"),
       layer("bg"),
