@@ -533,7 +533,8 @@ scene('lose', () => {
     'play'
   ])
   onClick('play', (p) => {
-    loseMusic.pause()
+    LEVEL_INDEX = 0
+    SCORE_GLOBAL = 0
     go('game')
     })
 })
@@ -573,7 +574,11 @@ scene('win', () => {
     area(),
     'play'
   ])
-  onClick('play', (p) => go('game'))
+  onClick('play', (p) => {
+    LEVEL_INDEX = 0
+    SCORE_GLOBAL = 0
+    go('game')
+  })
 })
 
 go('menu')

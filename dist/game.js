@@ -3158,7 +3158,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "play"
     ]);
     onClick("play", (p) => {
-      loseMusic.pause();
+      LEVEL_INDEX = 0;
+      SCORE_GLOBAL = 0;
       go("game");
     });
   });
@@ -3190,7 +3191,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       "play"
     ]);
-    onClick("play", (p) => go("game"));
+    onClick("play", (p) => {
+      LEVEL_INDEX = 0;
+      SCORE_GLOBAL = 0;
+      go("game");
+    });
   });
   go("menu");
 })();
