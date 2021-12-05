@@ -260,7 +260,7 @@ scene('game', () => {
   // add level numbers
   const level = add([
     text('level ' + parseInt(LEVEL_INDEX + 1)), 
-    pos(70,6), 
+    pos(80,6), 
     {
       value: LEVEL_INDEX,
     },

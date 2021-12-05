@@ -2879,7 +2879,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
     "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
     "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()],
-    "w": () => [sprite("enemy"), "s-enemy", solid(), scale(0.3), area()]
+    "w": () => [sprite("wingMan1"), "s-enemy", solid(), scale(0.3), area()]
   };
   var introMusic;
   scene("menu", () => {
@@ -2948,7 +2948,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     const level = add([
       text("level " + parseInt(LEVEL_INDEX + 1)),
-      pos(70, 6),
+      pos(80, 6),
       {
         value: LEVEL_INDEX
       },
