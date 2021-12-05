@@ -456,24 +456,25 @@ scene('game', () => {
     destroy(m)
   })
 
+  // TO-DO: fix snowball area() bug 
   // snowball restore melting snow box
-  onCollide('snowball', 'melting', (s, m) => {
-    play('hitWithSnowBall', {
-      volume:0.5,
-    })
-    gameLevel.spawn('=', m.gridPos.sub(0,0))
-    SCORE_GLOBAL+=15
-    score.text = SCORE_GLOBAL
-    destroy(s)
-  })
+  // onCollide('snowball', 'melting', (s, m) => {
+  //   play('hitWithSnowBall', {
+  //     volume:0.5,
+  //   })
+  //   gameLevel.spawn('=', m.gridPos.sub(0,0))
+  //   SCORE_GLOBAL+=15
+  //   score.text = SCORE_GLOBAL
+  //   destroy(s)
+  // })
 
   // -- enemies collide with objects --
   // TO-DO: Change to box
-  onCollide('s-enemy', 'snowball', (e, s) => {
-    play('hitWithSnowBall')
-    destroy(e)
-    destroy(s)
-  })
+  // onCollide('s-enemy', 'snowball', (e, s) => {
+  //   play('hitWithSnowBall')
+  //   destroy(e)
+  //   destroy(s)
+  // })
 
   // -- player collides with objects --
   // blue lightning
