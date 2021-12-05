@@ -52,6 +52,7 @@ loadSprite("lightning-blue", "sprites/lightning-blue.png");
 loadSprite("environment", "sprites/environment.png");
 loadSprite("play-button", "sprites/play-button.png");
 loadSprite("instructions", "sprites/instructions.png");
+loadSprite("win-scene", "sprites/win-scene.png");
 
 
 
@@ -391,4 +392,30 @@ scene('lose', () => {
   ])
 })
 
-go('menu')
+// win scene
+scene('win', () => {
+  add([
+    sprite('win-scene'),
+    layer('bg'),
+    origin('center'),
+    pos(width()/2, height()/2),
+    scale(1)
+  ])
+  
+  add([
+  text('Score: ' + SCORE_GLOBAL), 
+  origin('center'),
+  pos(388, 292),
+  scale(.6)
+  ])
+
+  add([
+    sprite('play-button'),
+    layer('bg'),
+    origin('center'),
+    pos(width()/2, 395),
+    scale(.07)
+  ])
+})
+
+go('win')
