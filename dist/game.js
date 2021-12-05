@@ -2741,6 +2741,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var JUMP_FORCE = 580;
   var BIG_JUMP_FORCE = 850;
   var MAGIC_SPEED = 400;
+  var SNOWBALL_SPEED = 200;
   var ENEMY_SPEED = 40;
   var FALL_DEATH = 600;
   var _a;
@@ -2788,14 +2789,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                       ",
       "                                       ",
       "                                       ",
-      "    =z                                 ",
+      "    =z               ^                  ",
+      "          b                            ",
+      "                 =*=%=                 ",
       "                                       ",
-      "                =*=%=                  ",
-      "                                       ",
-      "          ==                           ",
+      "          ====                          ",
       "t                           tt         ",
       "                                     | ",
-      "                   ^    ^              ",
+      "                   ^                   ",
       "                                       ",
       "===============================  ======"
     ],
@@ -2803,17 +2804,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                         =%            ",
       "                                       ",
       "                                       ",
-      "                                       ",
+      "                         ^             ",
       "                                   =*  ",
       "                                       ",
-      "                                       ",
+      "                ^                      ",
       "                                       ",
       "            _*_z_                      ",
       "                                       ",
       "       __                              ",
       "f                           tt         ",
       "                                     | ",
-      "                   ^    ^              ",
+      "  b                       ^            ",
       "                                       ",
       "_______________________________  ______"
     ],
@@ -2824,7 +2825,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                       ",
       "              w          -*-           ",
       "                                       ",
-      "                                 w     ",
+      "                        w         w     ",
       "                                       ",
       "                     -%-%-              ",
       "                                       ",
@@ -2848,7 +2849,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "z": () => [sprite("mystery-box2"), "lightning-surprise", "surprise-box", solid(), scale(0.35), area()],
     "}": () => [sprite("unboxed"), solid(), scale(0.35), area()],
     "|": () => [sprite("lamp-post"), "post", area(), solid()],
-    "^": () => [sprite("bunny-enemy"), "b-enemy", solid(), scale(0.2), area()],
+    "^": () => [sprite("bunny-enemy"), "b-enemy", "bleft", solid(), scale(0.2), area(), body()],
+    "b": () => [sprite("bunny-enemy"), "b-enemy", "bright", solid(), scale(0.2), area(), body()],
     "-": () => [sprite("block-2"), "ground", solid(), scale(0.35), area()],
     "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
@@ -2899,7 +2901,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       fixed()
     ]);
     const level = add([
-      text("level " + parseInt(LEVEL_INDEX)),
+      text("level " + parseInt(LEVEL_INDEX + 1)),
       pos(70, 6),
       {
         value: LEVEL_INDEX
@@ -2935,6 +2937,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     keyDown("up", () => {
       spawnMagic(player.pos.add(0, -35));
     });
+    keyDown("s", () => {
+      spawnSnowBall(player.pos.add(0, -35));
+    });
     function spawnMagic(p) {
       add([
         rect(3, 3),
@@ -2952,8 +2957,28 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         destroy(m);
       }
     });
-    onUpdate("b-enemy", (b) => {
+    function spawnSnowBall(p) {
+      add([
+        circle(6),
+        pos(p),
+        origin("center"),
+        area(),
+        color(255, 255, 255),
+        "snowball"
+      ]);
+    }
+    __name(spawnSnowBall, "spawnSnowBall");
+    onUpdate("snowball", (s) => {
+      s.move(0, -SNOWBALL_SPEED);
+      if (s.pos.y < 0) {
+        destroy(s);
+      }
+    });
+    onUpdate("bleft", (b) => {
       b.move(CURRENT_E_SPEED, 0);
+    });
+    onUpdate("bright", (b) => {
+      b.move(-CURRENT_E_SPEED, 0);
     });
     onUpdate("s-enemy", (s) => {
       s.move(0, CURRENT_S_SPEED);
@@ -3008,6 +3033,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     onCollide("magic", "block", (m, b) => {
       destroy(m);
+    });
+    onCollide("s-enemy", "snowball", (e, s) => {
+      destroy(e);
     });
     player.onCollide("lightning-blue", (b) => {
       player.biggify(7);
@@ -3110,6 +3138,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     onClick("play", (p) => go("game"));
   });
-  go("game");
+  go("menu");
 })();
 //# sourceMappingURL=game.js.map
