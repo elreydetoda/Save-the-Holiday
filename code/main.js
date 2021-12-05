@@ -3,6 +3,18 @@ import kaboom from "kaboom";
 // initialize context
 kaboom({width: 800, height: 500});
 
+let args = {}
+// constants
+const MOVE_SPEED = 200
+const JUMP_FORCE = 580
+const BIG_JUMP_FORCE = 850
+const MAGIC_SPEED = 400
+const ENEMY_SPEED = 40
+const FALL_DEATH = 600
+let LEVEL_INDEX = args.level ?? 0 
+let SCORE_GLOBAL = args.score ?? 0
+
+
 // load assets
 loadSprite("santa", "sprites/santa.png");
 loadSprite("mystery-box", "sprites/mystery-box.png");
@@ -132,16 +144,9 @@ scene('menu', () => {
 // game scene
 scene('game', () => {
 
-  let args = {}
-  // constants
-  const MOVE_SPEED = 200
-  const JUMP_FORCE = 580
-  const BIG_JUMP_FORCE = 850
-  const MAGIC_SPEED = 400
-  const ENEMY_SPEED = 40
-  const FALL_DEATH = 600
-  const LEVEL_INDEX = args.level ?? 0 
-  const SCORE_GLOBAL = args.score ?? 0
+
+  // add layers
+  layer(['obj', 'ui'], 'obj')
 
   // variables
   let CURRENT_JUMP_FORCE = JUMP_FORCE
@@ -188,7 +193,7 @@ scene('game', () => {
     camPos(player.pos.sub(-350,80))
     if(player.pos.y >= FALL_DEATH) {
       go('lose', {
-        score: score.value
+        score: SCORE_GLOBAL
       })
     }
   })
@@ -331,16 +336,16 @@ scene('game', () => {
   // green present
   player.onCollide('green-present', (g) => {
     destroy(g)
-    score.value++
-    score.text = score.value
+    SCORE_GLOBAL++
+    score.text = SCORE_GLOBAL
     console.log(score)
   })
 
   // candy cane
   player.onCollide('candy-cane', (c) => {
     destroy(c)
-    score.value++
-    score.text = score.value
+    SCORE_GLOBAL++
+    score.text = SCORE_GLOBAL
     console.log(score)
   })
 
@@ -351,18 +356,18 @@ scene('game', () => {
     } else {
       go('lose', {
         level: (LEVEL_INDEX),
-        score: score.value
+        score: SCORE_GLOBAL
       })
     }
   })
 
   // lamp post 
   player.onCollide('post', (p) => {
-    level.value++
+    LEVEL_INDEX++
     console.log(level.value)
     go('game', {
       level: level.value,
-      score: score.value
+      score: SCORE_GLOBAL
     })
   })
 
