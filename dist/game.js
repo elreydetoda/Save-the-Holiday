@@ -2772,6 +2772,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("lightning-blue", "sprites/lightning-blue.png");
   loadSprite("environment", "sprites/environment.png");
   loadSprite("play-button", "sprites/play-button.png");
+  loadSprite("instructions", "sprites/instructions.png");
   layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
@@ -2832,7 +2833,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   };
   scene("menu", () => {
     add([
-      sprite("environment"),
+      sprite("instructions"),
       layer("bg"),
       origin("center"),
       pos(width() / 2, height() / 2),
@@ -2842,7 +2843,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       sprite("play-button"),
       layer("bg"),
       origin("center"),
-      pos(700, 430),
+      pos(658, 410),
       scale(0.15),
       area(),
       "play"
@@ -3017,6 +3018,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(1)
     ]);
   });
-  go("game");
+  go("menu");
 })();
 //# sourceMappingURL=game.js.map

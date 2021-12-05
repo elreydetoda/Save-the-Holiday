@@ -45,6 +45,7 @@ loadPedit("magic", "sprites/magic.pedit");
 loadSprite("lightning-blue", "sprites/lightning-blue.png");
 loadSprite("environment", "sprites/environment.png");
 loadSprite("play-button", "sprites/play-button.png");
+loadSprite("instructions", "sprites/instructions.png");
 
 
 
@@ -117,7 +118,7 @@ loadSprite("play-button", "sprites/play-button.png");
 scene('menu', () => {
   // add background image (TO-DO: replace w/ instructions)
   add([
-    sprite('environment'),
+    sprite('instructions'),
     layer('bg'),
     origin('center'),
     pos(width()/2, height()/2),
@@ -129,7 +130,7 @@ scene('menu', () => {
     sprite('play-button'),
     layer('bg'),
     origin('center'),
-    pos(700, 430),
+    pos(658, 410),
     scale(.15),
     area(),
     'play'
@@ -384,4 +385,4 @@ scene('lose', () => {
   ])
 })
 
-go('game')
+go('menu')
