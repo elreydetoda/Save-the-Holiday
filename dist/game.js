@@ -2874,15 +2874,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       {
         value: SCORE_GLOBAL
       },
-      scale(0.3)
+      scale(0.4),
+      fixed()
     ]);
     const level = add([
       text("level " + parseInt(LEVEL_INDEX)),
-      pos(50, 6),
+      pos(70, 6),
       {
         value: LEVEL_INDEX
       },
-      scale(0.3)
+      scale(0.4),
+      fixed()
     ]);
     const player = add([sprite("santa"), pos(50, 0), area(), body(), big(), scale(0.65)]);
     player.onUpdate(() => {
@@ -3009,10 +3011,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.onCollide("post", (p) => {
       LEVEL_INDEX++;
       console.log(level.value);
-      go("game", {
-        level: level.value,
-        score: SCORE_GLOBAL
-      });
+      if (LEVEL_INDEX > 1) {
+        go("win", {
+          score: SCORE_GLOBAL
+        });
+      } else {
+        go("game", {
+          level: level.value,
+          score: SCORE_GLOBAL
+        });
+      }
     });
   });
   scene("lose", () => {
@@ -3059,6 +3067,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(0.07)
     ]);
   });
-  go("lose");
+  go("game");
 })();
 //# sourceMappingURL=game.js.map

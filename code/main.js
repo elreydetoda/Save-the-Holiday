@@ -151,7 +151,6 @@ scene('menu', () => {
 // game scene
 scene('game', () => {
 
-
   // add layers
   layer(['obj', 'ui'], 'obj')
 
@@ -179,18 +178,18 @@ scene('game', () => {
     {
       value: SCORE_GLOBAL,  
     }, 
-    scale(.3),
+    scale(.4),
     fixed()
   ])
 
   // add level numbers
   const level = add([
     text('level ' + parseInt(LEVEL_INDEX)), 
-    pos(50,6), 
+    pos(70,6), 
     {
       value: LEVEL_INDEX,
     },
-    scale(0.3),
+    scale(0.4),
     fixed()
   ])
 
@@ -374,13 +373,17 @@ scene('game', () => {
   player.onCollide('post', (p) => {
     LEVEL_INDEX++
     console.log(level.value)
-    // TO-DO: condition for last level
-    go('game', {
-      level: level.value,
-      score: SCORE_GLOBAL
-    })
+    if(LEVEL_INDEX > 2){
+      go('win', {
+        score: SCORE_GLOBAL
+      })
+    } else {
+        go('game', {
+        level: level.value,
+        score: SCORE_GLOBAL
+      })
+    }
   })
-
 })
 
 // lose scene  
@@ -441,4 +444,4 @@ scene('win', () => {
   onClick('play', (p) => go('game'))
 })
 
-go('menu')
+go('game')
