@@ -144,9 +144,7 @@ scene('menu', () => {
     'play'
   ])
 
-  // playButton.onMouseDown('left', () => {
-  //   go('game')
-  // })
+  onClick('play', (p) => go('game'))
 
 })
 
@@ -410,8 +408,11 @@ scene('lose', () => {
     layer('bg'),
     origin('center'),
     pos(width()/2, 395),
-    scale(.07)
+    scale(.07),
+    area(),
+    'play'
   ])
+  onClick('play', (p) => go('game'))
 })
 
 // win scene
@@ -436,8 +437,11 @@ scene('win', () => {
     layer('bg'),
     origin('center'),
     pos(width()/2, 395),
-    scale(.07)
+    scale(.07),
+    area(),
+    'play'
   ])
+  onClick('play', (p) => go('game'))
 })
 
 go('game')
