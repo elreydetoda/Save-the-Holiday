@@ -2782,29 +2782,29 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
+      "                         =%            ",
       "                                       ",
       "                                       ",
       "                                       ",
       "                                       ",
       "                                       ",
+      "    =z                                 ",
       "                                       ",
-      "                     =z                ",
+      "                =*=%=                  ",
       "                                       ",
-      "            =*=%=                      ",
-      "                                       ",
-      "      ==                               ",
+      "          ==                           ",
       "t                           tt         ",
-      "                                      |",
+      "                                     | ",
       "                   ^    ^              ",
       "                                       ",
       "===============================  ======"
     ],
     [
+      "                         =%            ",
       "                                       ",
       "                                       ",
       "                                       ",
-      "                                       ",
-      "                          =%           ",
+      "                                   =*  ",
       "                                       ",
       "                                       ",
       "                                       ",
@@ -2812,10 +2812,28 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                       ",
       "       __                              ",
       "f                           tt         ",
-      "                                  |    ",
+      "                                     | ",
       "                   ^    ^              ",
       "                                       ",
       "_______________________________  ______"
+    ],
+    [
+      "                                       ",
+      "    w                                 ",
+      "                                       ",
+      "                                       ",
+      "              w          -*-           ",
+      "                                       ",
+      "                                 w     ",
+      "                                       ",
+      "                     -%-%-              ",
+      "                                       ",
+      "       --                              ",
+      "f                           tt         ",
+      "                                     | ",
+      "                                       ",
+      "                                       ",
+      "-------------------------------  ------"
     ]
   ];
   var levelCfg = {
@@ -2835,7 +2853,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "_": () => [sprite("block-3"), "ground", solid(), scale(0.35), area()],
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
     "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
-    "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()]
+    "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()],
+    "w": () => [sprite("wingMan1"), "s-enemy", solid(), scale(0.3), area()]
   };
   scene("menu", () => {
     add([
@@ -2854,11 +2873,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       "play"
     ]);
+    onClick("play", (p) => go("game"));
   });
   scene("game", () => {
     layer(["obj", "ui"], "obj");
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
     let CURRENT_E_SPEED = -ENEMY_SPEED;
+    let CURRENT_S_SPEED = ENEMY_SPEED;
     let isJumping = true;
     add([
       sprite("environment"),
@@ -2901,13 +2922,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     keyDown("right", () => {
       player.move(MOVE_SPEED, 0);
     });
-    player.action(() => {
-      if (player.grounded()) {
+    player.onUpdate(() => {
+      if (player.isGrounded()) {
         isJumping = false;
       }
     });
     keyPress("space", () => {
-      if (player.grounded())
+      if (player.isGrounded())
         isJumping = true;
       player.jump(CURRENT_JUMP_FORCE);
     });
@@ -2933,6 +2954,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     onUpdate("b-enemy", (b) => {
       b.move(CURRENT_E_SPEED, 0);
+    });
+    onUpdate("s-enemy", (s) => {
+      s.move(0, CURRENT_S_SPEED);
+    });
+    onCollide("s-enemy", "ground", (s, g) => {
+      destroy(g);
     });
     function big() {
       let timer = 0;
@@ -3008,10 +3035,20 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         });
       }
     });
+    player.onCollide("s-enemy", (s) => {
+      if (isJumping) {
+        destroy(s);
+      } else {
+        go("lose", {
+          level: LEVEL_INDEX,
+          score: SCORE_GLOBAL
+        });
+      }
+    });
     player.onCollide("post", (p) => {
       LEVEL_INDEX++;
       console.log(level.value);
-      if (LEVEL_INDEX > 1) {
+      if (LEVEL_INDEX > 2) {
         go("win", {
           score: SCORE_GLOBAL
         });
@@ -3042,8 +3079,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       layer("bg"),
       origin("center"),
       pos(width() / 2, 395),
-      scale(0.07)
+      scale(0.07),
+      area(),
+      "play"
     ]);
+    onClick("play", (p) => go("game"));
   });
   scene("win", () => {
     add([
@@ -3064,8 +3104,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       layer("bg"),
       origin("center"),
       pos(width() / 2, 395),
-      scale(0.07)
+      scale(0.07),
+      area(),
+      "play"
     ]);
+    onClick("play", (p) => go("game"));
   });
   go("game");
 })();

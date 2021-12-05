@@ -66,28 +66,28 @@ loadSprite("lose-scene", "sprites/lose-scene.png");
   // map creation
   const maps = [
     [
+    '                         =%            ',
     '                                       ',
     '                                       ',
     '                                       ',
     '                                       ',
     '                                       ',
+    '    =z                                 ',
     '                                       ',
-    '                     =z                ',
+    '                =*=%=                  ',
     '                                       ',
-    '            =*=%=                      ',
-    '                                       ',
-    '      ==                               ',
+    '          ==                           ',
     't                           tt         ',
-    '                                      |',
+    '                                     | ',
     '                   ^    ^              ',
     '                                       ',
     '===============================  ======',
     ], [
+    '                         =%            ',
     '                                       ',
     '                                       ',
     '                                       ',
-    '                                       ',
-    '                          =%           ',
+    '                                   =*  ',
     '                                       ',
     '                                       ',
     '                                       ',
@@ -95,10 +95,28 @@ loadSprite("lose-scene", "sprites/lose-scene.png");
     '                                       ',
     '       __                              ',
     'f                           tt         ',
-    '                                  |    ',
+    '                                     | ',
     '                   ^    ^              ',
     '                                       ',
     '_______________________________  ______',
+    ],
+    [
+    '                                       ',
+    '    w                                 ',
+    '                                       ',
+    '                                       ',
+    '              w          -*-           ',
+    '                                       ',
+    '                                 w     ',
+    '                                       ',
+    '                     -%-%-              ',
+    '                                       ',
+    '       --                              ',
+    'f                           tt         ',
+    '                                     | ',
+    '                                       ',
+    '                                       ',
+    '-------------------------------  ------',
     ],
     ]
 
@@ -120,6 +138,7 @@ loadSprite("lose-scene", "sprites/lose-scene.png");
     'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35), area()],
     't': () => [sprite('tree'), 'right-tree', solid(), scale(0.45), area()],
     'f': () => [sprite('tree'), 'left-tree', solid(), scale(0.45), area()],
+    'w': () => [sprite('wingMan1'), 's-enemy', solid(), scale(0.3), area()],
   }
 
 // menu scene
@@ -157,6 +176,7 @@ scene('game', () => {
   // variables
   let CURRENT_JUMP_FORCE = JUMP_FORCE
   let CURRENT_E_SPEED = -ENEMY_SPEED
+  let CURRENT_S_SPEED = ENEMY_SPEED
   let isJumping = true
 
   // add background
@@ -215,14 +235,14 @@ scene('game', () => {
     player.move(MOVE_SPEED, 0)
   })
 
-  player.action(() => {
-    if (player.grounded()) {
+  player.onUpdate(() => {
+    if (player.isGrounded()) {
       isJumping = false
     }
   })
 
   keyPress('space', () => {
-    if(player.grounded())
+    if(player.isGrounded())
       isJumping = true
     player.jump(CURRENT_JUMP_FORCE)
   })
@@ -256,6 +276,17 @@ scene('game', () => {
   onUpdate('b-enemy', (b) => {
     b.move(CURRENT_E_SPEED, 0)
   })
+
+  // add sunbeam enemy motion
+  onUpdate('s-enemy', (s) => {
+      s.move(0, CURRENT_S_SPEED)
+  })
+
+  // enemy collides with left wall
+  onCollide('s-enemy', 'ground', (s, g) => {
+    destroy(g)
+  })
+  
 
   // make santa grow 
   function big() {
@@ -368,6 +399,19 @@ scene('game', () => {
       })
     }
   })
+
+  // sunbeam enemies
+  player.onCollide('s-enemy', (s) => {
+    if (isJumping) {
+      destroy(s)
+    } else {
+      go('lose', {
+        level: (LEVEL_INDEX),
+        score: SCORE_GLOBAL
+      })
+    }
+  })
+
 
   // lamp post 
   player.onCollide('post', (p) => {
