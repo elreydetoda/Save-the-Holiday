@@ -454,14 +454,14 @@ scene('game', () => {
   })
 
   // snowball restore melting snow box
-  onCollide('snowball', 'melting', (m, p) => {
+  onCollide('snowball', 'melting', (s, m) => {
     play('hitWithSnowBall', {
       volume:0.5,
     })
-    gameLevel.spawn('=', p.gridPos.sub(0,0))
+    gameLevel.spawn('=', m.gridPos.sub(0,0))
     SCORE_GLOBAL+=15
     score.text = SCORE_GLOBAL
-    destroy(m)
+    destroy(s)
   })
 
   // -- enemies collide with objects --
