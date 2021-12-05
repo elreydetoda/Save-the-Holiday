@@ -113,13 +113,20 @@ scene('menu', () => {
   ])
 
   // add play button 
-  add([
+  const playButton = add([
     sprite('play-button'),
     layer('bg'),
     origin('center'),
     pos(700, 430),
-    scale(.15)
+    scale(.15),
+    area(),
+    'play'
   ])
+
+  // playButton.onMouseDown('left', () => {
+  //   go('game')
+  // })
+
 })
 
 // game scene

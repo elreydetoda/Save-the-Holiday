@@ -2827,12 +2827,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       pos(width() / 2, height() / 2),
       scale(1)
     ]);
-    add([
+    const playButton = add([
       sprite("play-button"),
       layer("bg"),
       origin("center"),
       pos(700, 430),
-      scale(0.15)
+      scale(0.15),
+      area(),
+      "play"
     ]);
   });
   scene("game", () => {
