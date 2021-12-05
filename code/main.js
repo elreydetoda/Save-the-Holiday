@@ -132,7 +132,7 @@ loadSound("skrink", "sounds/skrink.mp3");
     '                                       ',
     '              w          -*-           ',
     '                                       ',
-    '                        w         w     ',
+    '                                 w     ',
     '                                       ',
     '                     -%-%-              ',
     '                                       ',
@@ -177,7 +177,7 @@ scene('menu', () => {
     loop: true
   })
 
-  // add background image (TO-DO: replace w/ instructions)
+  // add background image
   add([
     sprite('instructions'),
     layer('bg'),
@@ -197,7 +197,10 @@ scene('menu', () => {
     'play'
   ])
 
-  onClick('play', (p) => go('game'))
+  onClick('play', (p) => {
+    play('mouseClick')
+    go('game')
+  })
 
 })
 
@@ -269,6 +272,7 @@ scene('game', () => {
   player.onUpdate(() => {
     camPos(player.pos)
     if(player.pos.y >= FALL_DEATH) {
+      play('fallOff')
       go('lose', {
         score: SCORE_GLOBAL
       })
@@ -301,6 +305,7 @@ scene('game', () => {
   })
 
   keyDown('s', () => {
+    play('shoot')
     spawnSnowBall(player.pos.add(0, -35))
   })
 
@@ -383,12 +388,14 @@ scene('game', () => {
         return isBig
       },
       smallify() {
+        play('shrink')
         this.scale = vec2(.65)
         timer = 0
         isBig = false
         CURRENT_JUMP_FORCE = JUMP_FORCE
       },
       biggify(time) {
+        play('grow')
         this.scale = vec2(1)
         timer = time
         isBig = true
@@ -402,6 +409,7 @@ scene('game', () => {
   // -- magic collides with boxes -- 
   // surprise box - green present 
   onCollide('magic', 'present-surprise', (m, p) => {
+    play('giftReveal')
     gameLevel.spawn('$', p.gridPos.sub(1,2))
     gameLevel.spawn('=', p.gridPos.sub(0,0))
     destroy(m)
@@ -409,6 +417,7 @@ scene('game', () => {
 
   // surprise box - candy cane
   onCollide('magic', 'candy-cane-surprise', (m, c) => {
+    play('giftReveal')
     gameLevel.spawn('j', c.gridPos.sub(0,1))
     gameLevel.spawn('=', c.gridPos.sub(0,0))
     destroy(m)
@@ -416,6 +425,7 @@ scene('game', () => {
 
   // surprise box - blue lightning
   onCollide('magic', 'lightning-surprise', (m, l) => {
+    play('giftReveal')
     gameLevel.spawn('l', l.gridPos.sub(0,1.5))
     gameLevel.spawn('=', l.gridPos.sub(0,0))
     destroy(m)
@@ -427,7 +437,7 @@ scene('game', () => {
   })
 
   // -- enemies collide with objects --
-  // sunbeam collide with snowball
+  // TO-DO: Change to box
   onCollide('s-enemy', 'snowball', (e, s) => {
     destroy(e)
   })
@@ -441,6 +451,7 @@ scene('game', () => {
 
   // green present
   player.onCollide('green-present', (g) => {
+    play(collectGift)
     destroy(g)
     SCORE_GLOBAL++
     score.text = SCORE_GLOBAL
@@ -449,6 +460,7 @@ scene('game', () => {
 
   // candy cane
   player.onCollide('candy-cane', (c) => {
+    play(collectGift)
     destroy(c)
     SCORE_GLOBAL++
     score.text = SCORE_GLOBAL
@@ -458,8 +470,10 @@ scene('game', () => {
   // bunny enemies
   player.onCollide('b-enemy', (b) => {
     if (isJumping) {
+      play(jumpOnEnemy)
       destroy(b)
     } else {
+      play('runIntoEnemy')
       go('lose', {
         level: (LEVEL_INDEX),
         score: SCORE_GLOBAL
@@ -470,8 +484,10 @@ scene('game', () => {
   // sunbeam enemies
   player.onCollide('s-enemy', (s) => {
     if (isJumping) {
+      play(jumpOnEnemy)
       destroy(s)
     } else {
+      play('runIntoEnemy')
       go('lose', {
         level: (LEVEL_INDEX),
         score: SCORE_GLOBAL
@@ -489,6 +505,7 @@ scene('game', () => {
         score: SCORE_GLOBAL
       })
     } else {
+      play('levelUp')
         go('game', {
         level: level.value,
         score: SCORE_GLOBAL
@@ -533,6 +550,7 @@ scene('lose', () => {
     'play'
   ])
   onClick('play', (p) => {
+    play('mouseClick')
     LEVEL_INDEX = 0
     SCORE_GLOBAL = 0
     go('game')
@@ -575,6 +593,7 @@ scene('win', () => {
     'play'
   ])
   onClick('play', (p) => {
+    play('mouseClick')
     LEVEL_INDEX = 0
     SCORE_GLOBAL = 0
     go('game')
