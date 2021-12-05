@@ -2778,6 +2778,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("play-button", "sprites/play-button.png");
   loadSprite("instructions", "sprites/instructions.png");
   loadSprite("win-scene", "sprites/win-scene.png");
+  loadSprite("lose-scene", "sprites/lose-scene.png");
   layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
@@ -3016,10 +3017,24 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   scene("lose", () => {
     add([
-      text("Game Over\n" + SCORE_GLOBAL),
+      sprite("lose-scene"),
+      layer("bg"),
       origin("center"),
       pos(width() / 2, height() / 2),
       scale(1)
+    ]);
+    add([
+      text("Score: " + SCORE_GLOBAL),
+      origin("center"),
+      pos(388, 292),
+      scale(0.6)
+    ]);
+    add([
+      sprite("play-button"),
+      layer("bg"),
+      origin("center"),
+      pos(width() / 2, 395),
+      scale(0.07)
     ]);
   });
   scene("win", () => {
@@ -3044,6 +3059,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(0.07)
     ]);
   });
-  go("win");
+  go("lose");
 })();
 //# sourceMappingURL=game.js.map
