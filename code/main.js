@@ -1,7 +1,13 @@
 import kaboom from "kaboom";
 
 // initialize context
-kaboom({width: 800, height: 500});
+kaboom(
+  {
+    width: 800,
+    height: 500,
+    background: [ 179, 209, 249, ]
+  }
+);
 
 let args = {}
 // constants
@@ -157,9 +163,9 @@ scene('game', () => {
   add([
     sprite('environment'),
     layer('bg'),
-    origin('center'),
-    pos(width()/2, height()/2),
-    scale(1)
+    origin('topleft'),
+    scale(width()/240, height()/240),
+    // scale(1)
   ])
 
   const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
