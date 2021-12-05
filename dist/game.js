@@ -2732,6 +2732,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
 
   // code/main.js
   Es({ width: 800, height: 500 });
+  var args = {};
+  var MOVE_SPEED = 200;
+  var JUMP_FORCE = 580;
+  var BIG_JUMP_FORCE = 850;
+  var MAGIC_SPEED = 400;
+  var ENEMY_SPEED = 40;
+  var FALL_DEATH = 600;
+  var _a;
+  var LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
+  var _a2;
+  var SCORE_GLOBAL = (_a2 = args.score) != null ? _a2 : 0;
   loadSprite("santa", "sprites/santa.png");
   loadSprite("mystery-box", "sprites/mystery-box.png");
   loadSprite("mystery-box2", "sprites/mystery-box2.png");
@@ -2838,16 +2849,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
   });
   scene("game", () => {
-    var _a, _b;
-    let args = {};
-    const MOVE_SPEED = 200;
-    const JUMP_FORCE = 580;
-    const BIG_JUMP_FORCE = 850;
-    const MAGIC_SPEED = 400;
-    const ENEMY_SPEED = 40;
-    const FALL_DEATH = 600;
-    const LEVEL_INDEX = (_a = args.level) != null ? _a : 0;
-    const SCORE_GLOBAL2 = (_b = args.score) != null ? _b : 0;
+    layer(["obj", "ui"], "obj");
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
     let CURRENT_E_SPEED = -ENEMY_SPEED;
     let isJumping = true;
@@ -2860,11 +2862,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
     const score = add([
-      text(SCORE_GLOBAL2),
+      text(SCORE_GLOBAL),
       pos(20, 6),
       layer("ui"),
       {
-        value: SCORE_GLOBAL2
+        value: SCORE_GLOBAL
       },
       scale(0.3)
     ]);
@@ -2878,10 +2880,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     const player = add([sprite("santa"), pos(50, 0), area(), body(), big(), scale(0.65)]);
     player.onUpdate(() => {
-      camPos(player.pos.sub(-350, 80));
+      camPos(player.pos);
       if (player.pos.y >= FALL_DEATH) {
         go("lose", {
-          score: score.value
+          score: SCORE_GLOBAL
         });
       }
     });
@@ -2978,14 +2980,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     player.onCollide("green-present", (g) => {
       destroy(g);
-      score.value++;
-      score.text = score.value;
+      SCORE_GLOBAL++;
+      score.text = SCORE_GLOBAL;
       console.log(score);
     });
     player.onCollide("candy-cane", (c2) => {
       destroy(c2);
-      score.value++;
-      score.text = score.value;
+      SCORE_GLOBAL++;
+      score.text = SCORE_GLOBAL;
       console.log(score);
     });
     player.onCollide("b-enemy", (b) => {
@@ -2994,16 +2996,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       } else {
         go("lose", {
           level: LEVEL_INDEX,
-          score: score.value
+          score: SCORE_GLOBAL
         });
       }
     });
     player.onCollide("post", (p) => {
-      level.value++;
+      LEVEL_INDEX++;
       console.log(level.value);
       go("game", {
         level: level.value,
-        score: score.value
+        score: SCORE_GLOBAL
       });
     });
   });
@@ -3015,6 +3017,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(1)
     ]);
   });
-  go("menu");
+  go("game");
 })();
 //# sourceMappingURL=game.js.map

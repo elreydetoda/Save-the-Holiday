@@ -190,7 +190,7 @@ scene('game', () => {
 
   // add camera movement
   player.onUpdate(() => {
-    camPos(player.pos.sub(-350,80))
+    camPos(player.pos)
     if(player.pos.y >= FALL_DEATH) {
       go('lose', {
         score: SCORE_GLOBAL
@@ -365,6 +365,7 @@ scene('game', () => {
   player.onCollide('post', (p) => {
     LEVEL_INDEX++
     console.log(level.value)
+    // TO-DO: condition for last level
     go('game', {
       level: level.value,
       score: SCORE_GLOBAL
@@ -383,4 +384,4 @@ scene('lose', () => {
   ])
 })
 
-go('menu')
+go('game')
