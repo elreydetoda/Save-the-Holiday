@@ -40,3 +40,16 @@ Some future enhancements include:
 * Additional levels and challenges
 
 ## Gallery of photos
+
+###### Level 1
+![image](https://user-images.githubusercontent.com/10230166/144745180-1649e422-a43e-41a2-a20c-7e856300878f.png)
+
+###### Level 3
+![image](https://user-images.githubusercontent.com/10230166/144745205-2ccf3625-fe22-4c20-b0e3-f944115b21b8.png)
+
+###### Win Scene
+![image](https://user-images.githubusercontent.com/10230166/144745252-c9388cf6-d4db-4751-9dc4-ff701924e469.png)
+
+###### YT Demo Video
+
+[![Blinking LEDs](http://img.youtube.com/vi/6sjrm4j6EW8/0.jpg)](https://youtu.be/6sjrm4j6EW8)
