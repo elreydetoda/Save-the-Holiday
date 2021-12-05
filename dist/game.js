@@ -3011,10 +3011,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.onCollide("post", (p) => {
       LEVEL_INDEX++;
       console.log(level.value);
-      go("game", {
-        level: level.value,
-        score: SCORE_GLOBAL
-      });
+      if (LEVEL_INDEX > 1) {
+        go("win", {
+          score: SCORE_GLOBAL
+        });
+      } else {
+        go("game", {
+          level: level.value,
+          score: SCORE_GLOBAL
+        });
+      }
     });
   });
   scene("lose", () => {

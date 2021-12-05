@@ -153,7 +153,6 @@ scene('menu', () => {
 // game scene
 scene('game', () => {
 
-
   // add layers
   layer(['obj', 'ui'], 'obj')
 
@@ -376,13 +375,17 @@ scene('game', () => {
   player.onCollide('post', (p) => {
     LEVEL_INDEX++
     console.log(level.value)
-    // TO-DO: condition for last level
-    go('game', {
-      level: level.value,
-      score: SCORE_GLOBAL
-    })
+    if(LEVEL_INDEX > 2){
+      go('win', {
+        score: SCORE_GLOBAL
+      })
+    } else {
+        go('game', {
+        level: level.value,
+        score: SCORE_GLOBAL
+      })
+    }
   })
-
 })
 
 // lose scene  
