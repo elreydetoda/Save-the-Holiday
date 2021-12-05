@@ -2780,7 +2780,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("instructions", "sprites/instructions.png");
   loadSprite("win-scene", "sprites/win-scene.png");
   loadSprite("lose-scene", "sprites/lose-scene.png");
-  loadPedit("enemy", "sprites/enemy.pedit");
   loadSound("collectGift", "sounds/collectGift.mp3");
   loadSound("gameplay", "sounds/gameplay.mp3");
   loadSound("gameplay2", "sounds/gameplay2.mp3");
@@ -2812,11 +2811,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                                       ",
       "                                       ",
       "                                       ",
-      "    =z               ^                  ",
+      "    =z               ^                 ",
       "          b                            ",
       "                 =*=%=                 ",
       "                                       ",
-      "          ====                          ",
+      "          ====                         ",
       "t                           tt         ",
       "                                     | ",
       "                   ^                   ",
@@ -2833,24 +2832,24 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "                ^                      ",
       "                                       ",
       "            _*_z_                      ",
-      "         b                              ",
+      "         b                             ",
       "       __                              ",
       "f                           tt         ",
       "                                     | ",
-      "                         ^            ",
+      "                         ^             ",
       "                                       ",
       "_______________________________  ______"
     ],
     [
       "                                       ",
-      "    w                                 ",
+      "    w                                  ",
       "                                       ",
       "                                       ",
       "              w          -*-           ",
       "                                       ",
       "                                 w     ",
-      "                    w                   ",
-      "                     -%-%-              ",
+      "                  w                    ",
+      "                     -%-%-             ",
       "                                       ",
       "       --                              ",
       "f                           tt         ",
@@ -2948,7 +2947,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     const level = add([
       text("level " + parseInt(LEVEL_INDEX + 1)),
-      pos(80, 6),
+      pos(90, 6),
       {
         value: LEVEL_INDEX
       },
@@ -3034,6 +3033,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     onUpdate("s-enemy", (s) => {
       s.move(0, CURRENT_S_SPEED);
+      if (s.pos.y < 0) {
+        destroy(s);
+      }
     });
     onCollide("s-enemy", "ground", (s, g) => {
       destroy(g);
@@ -3101,17 +3103,19 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     onCollide("magic", "block", (m, b) => {
       destroy(m);
     });
-    onCollide("snowball", "melting", (m, p) => {
+    onCollide("snowball", "melting", (s, m) => {
       play("hitWithSnowBall", {
         volume: 0.5
       });
-      gameLevel.spawn("=", p.gridPos.sub(0, 0));
+      gameLevel.spawn("=", m.gridPos.sub(0, 0));
       SCORE_GLOBAL += 15;
       score.text = SCORE_GLOBAL;
-      destroy(m);
+      destroy(s);
     });
     onCollide("s-enemy", "snowball", (e, s) => {
+      play("hitWithSnowBall");
       destroy(e);
+      destroy(s);
     });
     player.onCollide("lightning-blue", (b) => {
       player.biggify(7);

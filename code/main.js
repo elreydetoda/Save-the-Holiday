@@ -98,11 +98,11 @@ loadSound("shrink", "sounds/shrink.mp3");
     '                                       ',
     '                                       ',
     '                                       ',
-    '    =z               ^                  ',
+    '    =z               ^                 ',
     '          b                            ',
     '                 =*=%=                 ',
     '                                       ',
-    '          ====                          ',
+    '          ====                         ',
     't                           tt         ',
     '                                     | ',
     '                   ^                   ',
@@ -118,24 +118,24 @@ loadSound("shrink", "sounds/shrink.mp3");
     '                ^                      ',
     '                                       ',
     '            _*_z_                      ',
-    '         b                              ',
+    '         b                             ',
     '       __                              ',
     'f                           tt         ',
     '                                     | ',
-    '                         ^            ',
+    '                         ^             ',
     '                                       ',
     '_______________________________  ______',
     ],
     [
     '                                       ',
-    '    w                                 ',
+    '    w                                  ',
     '                                       ',
     '                                       ',
     '              w          -*-           ',
     '                                       ',
     '                                 w     ',
-    '                    w                   ',
-    '                     -%-%-              ',
+    '                  w                    ',
+    '                     -%-%-             ',
     '                                       ',
     '       --                              ',
     'f                           tt         ',
@@ -260,7 +260,7 @@ scene('game', () => {
   // add level numbers
   const level = add([
     text('level ' + parseInt(LEVEL_INDEX + 1)), 
-    pos(80,6), 
+    pos(90,6), 
     {
       value: LEVEL_INDEX,
     },
@@ -369,7 +369,10 @@ scene('game', () => {
 
   // add sunbeam enemy motion
   onUpdate('s-enemy', (s) => {
-      s.move(0, CURRENT_S_SPEED)
+    s.move(0, CURRENT_S_SPEED)
+    if (s.pos.y < 0){
+      destroy(s)
+    }
   })
 
   // TO-DO: fix enemy collides with left wall
