@@ -2780,6 +2780,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("instructions", "sprites/instructions.png");
   loadSprite("win-scene", "sprites/win-scene.png");
   loadSprite("lose-scene", "sprites/lose-scene.png");
+  loadPedit("enemy", "sprites/enemy.pedit");
   loadSound("collectGift", "sounds/collectGift.mp3");
   loadSound("gameplay", "sounds/gameplay.mp3");
   loadSound("gameplay2", "sounds/gameplay2.mp3");
@@ -2878,7 +2879,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "x": () => [sprite("block-5"), "ground", solid(), scale(0.35), area()],
     "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
     "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()],
-    "w": () => [sprite("wingMan1"), "s-enemy", solid(), scale(0.3), area()]
+    "w": () => [sprite("enemy"), "s-enemy", solid(), scale(0.3), area()]
   };
   var introMusic;
   scene("menu", () => {
@@ -3219,6 +3220,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "play"
     ]);
     onClick("play", (p) => {
+      loseMusic.pause();
       play("mouseClick", {
         volume: 0.8
       });
@@ -3256,6 +3258,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "play"
     ]);
     onClick("play", (p) => {
+      winMusic.pause();
       play("mouseClick", {
         volume: 0.8
       });
