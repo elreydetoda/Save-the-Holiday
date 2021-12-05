@@ -1,7 +1,7 @@
 import kaboom from "kaboom";
 
 // initialize context
-kaboom({background: [0, 0, 0]});
+kaboom({width: 800, height: 500});
 
 // load assets
 loadSprite("santa", "sprites/santa.png");
@@ -31,13 +31,16 @@ loadSprite("buttonStart", "sprites/buttonStart.png");
 loadSprite("arrowUp", "sprites/arrowUp.png");
 loadPedit("magic", "sprites/magic.pedit");
 loadSprite("lightning-blue", "sprites/lightning-blue.png");
+loadSprite("environment", "sprites/environment.png");
+loadSprite("play-button", "sprites/play-button.png");
 
 
 
 /* --------------- SCENES -----------------*/
 // TO-DO: win scene
 
-// TO-DO: menu scene
+  // add layers
+  layers(['bg','obj', 'ui'], 'obj')
 
   // map creation
   const maps = [
@@ -98,13 +101,29 @@ loadSprite("lightning-blue", "sprites/lightning-blue.png");
     'f': () => [sprite('tree'), 'left-tree', solid(), scale(0.45), area()],
   }
 
+// menu scene
+scene('menu', () => {
+  // add background image (TO-DO: replace w/ instructions)
+  add([
+    sprite('environment'),
+    layer('bg'),
+    origin('center'),
+    pos(width()/2, height()/2),
+    scale(1)
+  ])
 
+  // add play button 
+  add([
+    sprite('play-button'),
+    layer('bg'),
+    origin('center'),
+    pos(700, 430),
+    scale(.15)
+  ])
+})
 
 // game scene
 scene('game', () => {
-
-  // add layers
-  layer(['obj', 'ui'], 'obj')
 
   let args = {}
   // constants
@@ -122,9 +141,18 @@ scene('game', () => {
   let CURRENT_E_SPEED = -ENEMY_SPEED
   let isJumping = true
 
+  // add background
+  add([
+    sprite('environment'),
+    layer('bg'),
+    origin('center'),
+    pos(width()/2, height()/2),
+    scale(1)
+  ])
+
   const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
 
-    // add a score
+  // add a score
   const score = add([
     text(SCORE_GLOBAL),
     pos(20,6),
@@ -149,15 +177,14 @@ scene('game', () => {
   const player = add([sprite('santa'), pos(50,0), area(), body(), big(), scale(.65)])
 
   // add camera movement
-  player.action(() => {
-    camPos(player.pos)
+  player.onUpdate(() => {
+    camPos(player.pos.sub(-350,80))
     if(player.pos.y >= FALL_DEATH) {
       go('lose', {
         score: score.value
       })
     }
   })
-
 
   // keystroke events
   keyDown('left', () => {
@@ -266,26 +293,26 @@ scene('game', () => {
   })
     
   // regular block
-    onCollide('magic', 'block', (m, b) => {
+  onCollide('magic', 'block', (m, b) => {
     destroy(m)
   })
 
   // -- enemies collide with objects --
-  // left tree
-  onCollide('b-enemy', 'left-tree', (b, l) => {
-    CURRENT_E_SPEED = ENEMY_SPEED
-    every('b-enemy', (b) => {
-      b.move(CURRENT_E_SPEED,  0)
-    })
-  })
+  // // left tree
+  // onCollide('b-enemy', 'left-tree', () => {
+  //   CURRENT_E_SPEED = ENEMY_SPEED
+  //   every('b-enemy', (b) => {
+  //     b.move(CURRENT_E_SPEED,  0)
+  //   })
+  // })
   
-  // right tree
-  onCollide('b-enemy', 'right-tree', (b, r) => {
-    CURRENT_E_SPEED = -ENEMY_SPEED
-    every('b-enemy', (b) => {
-      b.move(CURRENT_E_SPEED,  0)
-    })
-  })
+  // // right tree
+  // onCollide('b-enemy', 'right-tree', (b, r) => {
+  //   CURRENT_E_SPEED = -ENEMY_SPEED
+  //   every('b-enemy', (b) => {
+  //     b.move(CURRENT_E_SPEED,  0)
+  //   })
+  // })
 
   // -- player collides with objects --
   // blue lightning
@@ -344,4 +371,4 @@ scene('lose', () => {
   ])
 })
 
-go('game')
+go('menu')

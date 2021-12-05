@@ -2731,7 +2731,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }, "default");
 
   // code/main.js
-  Es({ background: [0, 0, 0] });
+  Es({ width: 800, height: 500 });
   loadSprite("santa", "sprites/santa.png");
   loadSprite("mystery-box", "sprites/mystery-box.png");
   loadSprite("mystery-box2", "sprites/mystery-box2.png");
@@ -2759,6 +2759,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("arrowUp", "sprites/arrowUp.png");
   loadPedit("magic", "sprites/magic.pedit");
   loadSprite("lightning-blue", "sprites/lightning-blue.png");
+  loadSprite("environment", "sprites/environment.png");
+  loadSprite("play-button", "sprites/play-button.png");
+  layers(["bg", "obj", "ui"], "obj");
   var maps = [
     [
       "                                       ",
@@ -2816,9 +2819,24 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     "t": () => [sprite("tree"), "right-tree", solid(), scale(0.45), area()],
     "f": () => [sprite("tree"), "left-tree", solid(), scale(0.45), area()]
   };
+  scene("menu", () => {
+    add([
+      sprite("environment"),
+      layer("bg"),
+      origin("center"),
+      pos(width() / 2, height() / 2),
+      scale(1)
+    ]);
+    add([
+      sprite("play-button"),
+      layer("bg"),
+      origin("center"),
+      pos(700, 430),
+      scale(0.15)
+    ]);
+  });
   scene("game", () => {
     var _a, _b;
-    layer(["obj", "ui"], "obj");
     let args = {};
     const MOVE_SPEED = 200;
     const JUMP_FORCE = 580;
@@ -2831,6 +2849,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
     let CURRENT_E_SPEED = -ENEMY_SPEED;
     let isJumping = true;
+    add([
+      sprite("environment"),
+      layer("bg"),
+      origin("center"),
+      pos(width() / 2, height() / 2),
+      scale(1)
+    ]);
     const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg);
     const score = add([
       text(SCORE_GLOBAL2),
@@ -2850,8 +2875,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(0.3)
     ]);
     const player = add([sprite("santa"), pos(50, 0), area(), body(), big(), scale(0.65)]);
-    player.action(() => {
-      camPos(player.pos);
+    player.onUpdate(() => {
+      camPos(player.pos.sub(-350, 80));
       if (player.pos.y >= FALL_DEATH) {
         go("lose", {
           score: score.value
@@ -2945,18 +2970,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     onCollide("magic", "block", (m, b) => {
       destroy(m);
     });
-    onCollide("b-enemy", "left-tree", (b, l) => {
-      CURRENT_E_SPEED = ENEMY_SPEED;
-      every("b-enemy", (b2) => {
-        b2.move(CURRENT_E_SPEED, 0);
-      });
-    });
-    onCollide("b-enemy", "right-tree", (b, r) => {
-      CURRENT_E_SPEED = -ENEMY_SPEED;
-      every("b-enemy", (b2) => {
-        b2.move(CURRENT_E_SPEED, 0);
-      });
-    });
     player.onCollide("lightning-blue", (b) => {
       player.biggify(7);
       destroy(b);
@@ -3000,6 +3013,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       scale(1)
     ]);
   });
-  go("game");
+  go("menu");
 })();
 //# sourceMappingURL=game.js.map
