@@ -155,8 +155,8 @@ const levelCfg = {
   'z': () => [sprite('mystery-box2'), 'lightning-surprise', 'surprise-box', solid(), scale(0.35)],
   '\}': () => [sprite('unboxed'), solid(), scale(0.35)],
   '|': () => [sprite('lamp-post'), 'post', solid()],
-  '^': () => [sprite('bunny-enemy'), 'b-enemy', 'bleft', solid(), scale(0.2), body(), {dir: 1}],
-  'b': () => [sprite('bunny-enemy'), 'b-enemy', 'bright', solid(), scale(0.2), body(), {dir: 1}],
+  '^': () => [sprite('bunny-enemy'), 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
+  'b': () => [sprite('bunny-enemy'), 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
   '-': () => [sprite('block-2'), 'ground', 'melting', solid(), scale(0.35)],
   '_': () => [sprite('block-3'), 'ground', 'melting', solid(), scale(0.35)],
   'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
@@ -206,7 +206,7 @@ scene('menu', () => {
 
 let loseMusic, winMusic;
 // game scene
-scene('game', ({ level, score}) => {
+scene('game', ({ level, score }) => {
 
   // introMusic.pause()
   // if (loseMusic) {
@@ -223,7 +223,7 @@ scene('game', ({ level, score}) => {
   // })
 
   // add layers
-  layer(['bg','obj', 'ui'], 'obj')
+  layer(['bg', 'obj', 'ui'], 'obj')
 
   // variables
   let CURRENT_JUMP_FORCE = JUMP_FORCE
@@ -314,18 +314,6 @@ scene('game', ({ level, score}) => {
     spawnSnowBall(player.pos.add(0, -35))
   })
 
-  //TO-DO: use magic image if possible
-  // add magic casting
-  function spawnMagic(p) {
-    add([
-      rect(3, 3),
-      pos(p),
-      origin('center'),
-      color(44, 171, 77),
-      'magic'
-    ])
-  }
-
   // add magic motion
   action('magic', (m) => {
     m.move(0, -MAGIC_SPEED)
@@ -334,16 +322,6 @@ scene('game', ({ level, score}) => {
     }
   })
 
-  // add snowball shooting
-  function spawnSnowBall(p) {
-    add([
-      rect(6,6),
-      pos(p),
-      origin('center'),
-      color(255, 255, 255),
-      'snowball'
-    ])
-  }
 
   // add snowball motion
   action('snowball', (s) => {
@@ -378,43 +356,6 @@ scene('game', ({ level, score}) => {
     b.dir = -b.dir
   })
 
-
-  // make santa grow 
-  function big() {
-    let timer = 0
-    let isBig = false
-    return {
-      update() {
-        if (isBig) {
-          timer -= dt()
-          if (timer <= 0) {
-            this.smallify()
-          }
-        }
-      },
-      isBig() {
-        return isBig
-      },
-      smallify() {
-        play('shrink', {
-          volume: 0.8,
-        })
-        this.scale = vec2(.65)
-        timer = 0
-        isBig = false
-        CURRENT_JUMP_FORCE = JUMP_FORCE
-      },
-      biggify(time) {
-        play('grow', {
-          volume: 0.5,
-        })
-        this.scale = vec2(1)
-        timer = time
-        isBig = true
-        CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
-      }
-    }
-  }
 
   // /* --------------- COLLISIONS -----------------*/
 
@@ -551,7 +492,7 @@ scene('game', ({ level, score}) => {
 })
 
 // lose scene  
-scene('lose', ({level, score}) => {
+scene('lose', ({ level, score }) => {
 
   // gameplayMusic.pause()
 
@@ -590,12 +531,12 @@ scene('lose', ({level, score}) => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', {level: 0, score: 0})
+    go('game', { level: 0, score: 0 })
   })
 })
 
 // win scene
-scene('win', ({ level, score}) => {
+scene('win', ({ level, score }) => {
 
   // gameplayMusic.pause()
 
@@ -634,26 +575,92 @@ scene('win', ({ level, score}) => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', {level: 0, score: 0})
+    go('game', { level: 0, score: 0 })
   })
 })
 
-function level_up(level, score ) {
-    // we never want them to be equal to num of maps, because
-    //  they'll hit an out of bounds if they do
-    if (level === (maps.length - 1)) {
-      go('win', {
-        score: score
+/* ************************ all functions ************************** */
+
+/* *********** santa ************** */
+// make santa grow 
+function big() {
+  let timer = 0
+  let isBig = false
+  return {
+    update() {
+      if (isBig) {
+        timer -= dt()
+        if (timer <= 0) {
+          this.smallify()
+        }
+      }
+    },
+    isBig() {
+      return isBig
+    },
+    smallify() {
+      play('shrink', {
+        volume: 0.8,
       })
-    } else {
-      play('levelUp', {
+      this.scale = vec2(.65)
+      timer = 0
+      isBig = false
+      CURRENT_JUMP_FORCE = JUMP_FORCE
+    },
+    biggify(time) {
+      play('grow', {
         volume: 0.5,
       })
-      go('game', {
-        level: (level + 1),
-        score: score
-      })
+      this.scale = vec2(1)
+      timer = time
+      isBig = true
+      CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
     }
+  }
 }
 
-start('game', {level: 0, score: 0})
+// add snowball shooting
+function spawnSnowBall(p) {
+  add([
+    rect(6, 6),
+    pos(p),
+    origin('center'),
+    color(255, 255, 255),
+    'snowball'
+  ])
+}
+
+//TO-DO: use magic image if possible
+// add magic casting
+function spawnMagic(p) {
+  add([
+    rect(3, 3),
+    pos(p),
+    origin('center'),
+    color(44, 171, 77),
+    'magic'
+  ])
+}
+
+
+/* *********** utility ************** */
+
+function level_up(level, score) {
+  // we never want them to be equal to num of maps, because
+  //  they'll hit an out of bounds if they do
+  if (level === (maps.length - 1)) {
+    go('win', {
+      score: score
+    })
+  } else {
+    play('levelUp', {
+      volume: 0.5,
+    })
+    go('game', {
+      level: (level + 1),
+      score: score
+    })
+  }
+}
+
+start('game', { level: 0, score: 0 })
