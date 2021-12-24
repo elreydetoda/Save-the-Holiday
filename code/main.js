@@ -3,7 +3,8 @@ kaboom(
   {
     width: 800,
     height: 500,
-    background: [179, 209, 249,],
+    // background: [179, 209, 249,], // take these values and put them over /255 get's values below
+    clearColor: [0.7019607843137255, 0.8196078431372549, 0.9764705882352941, 1],
     global: true,
   }
 );
