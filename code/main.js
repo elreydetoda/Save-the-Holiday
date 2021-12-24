@@ -17,6 +17,9 @@ const MAGIC_SPEED = 400
 const SNOWBALL_SPEED = 200
 const ENEMY_SPEED = 40
 const FALL_DEATH = 600
+const scoreScale = 2
+// i.e. when you win or lose
+const conditionSceneTextScale = 5
 
 
 // load sprites
@@ -250,7 +253,7 @@ scene('game', ({ level, score }) => {
     {
       value: score,
     },
-    scale(2),
+    scale(scoreScale),
     // fixed()
   ])
 
@@ -261,7 +264,7 @@ scene('game', ({ level, score }) => {
     {
       value: level,
     },
-    scale(2),
+    scale(scoreScale),
     // fixed()
   ])
 
@@ -514,7 +517,7 @@ scene('lose', ({ level, score }) => {
     text('Score: ' + score),
     origin('center'),
     pos(388, 292),
-    scale(5)
+    scale(conditionSceneTextScale)
   ])
 
   add([
@@ -558,7 +561,7 @@ scene('win', ({ level, score }) => {
     text('Score: ' + score),
     origin('center'),
     pos(388, 292),
-    scale(.6)
+    scale(conditionSceneTextScale)
   ])
 
   add([
