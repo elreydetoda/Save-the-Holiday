@@ -17,7 +17,6 @@ const MAGIC_SPEED = 400
 const SNOWBALL_SPEED = 200
 const ENEMY_SPEED = 40
 const FALL_DEATH = 600
-let LEVEL_INDEX = args.level ?? 0
 
 
 // load sprites
@@ -257,10 +256,10 @@ scene('game', ({ level, score}) => {
 
   // add level numbers
   add([
-    text('level ' + parseInt(LEVEL_INDEX + 1)),
+    text('level ' + parseInt(level + 1)),
     pos(90, 6),
     {
-      value: LEVEL_INDEX,
+      value: level,
     },
     scale(2),
     // fixed()
@@ -516,7 +515,7 @@ scene('game', ({ level, score}) => {
         volume: 0.5,
       })
       go('lose', {
-        level: (LEVEL_INDEX),
+        level: (level),
         score: scoreLabel.value
       })
     }
@@ -536,7 +535,7 @@ scene('game', ({ level, score}) => {
         volume: 0.5,
       })
       go('lose', {
-        level: (LEVEL_INDEX),
+        level: (level),
         score: scoreLabel.value
       })
     }
@@ -544,23 +543,10 @@ scene('game', ({ level, score}) => {
 
   // lamp post 
   player.collides('post', (p) => {
-    LEVEL_INDEX++
     scoreLabel.value += 100
     scoreLabel.text = scoreLabel.value
-    gameplayMusic.pause()
-    if (LEVEL_INDEX > 2) {
-      go('win', {
-        score: scoreLabel.value
-      })
-    } else {
-      play('levelUp', {
-        volume: 0.5,
-      })
-      go('game', {
-        level: level.value,
-        score: scoreLabel.value
-      })
-    }
+    // gameplayMusic.pause()
+    level_up(level, scoreLabel.value)
   })
 })
 
@@ -611,7 +597,7 @@ scene('lose', ({level, score}) => {
 // win scene
 scene('win', ({ level, score}) => {
 
-  gameplayMusic.pause()
+  // gameplayMusic.pause()
 
   // win scene music
   winMusic = play("winScene", {
@@ -651,5 +637,23 @@ scene('win', ({ level, score}) => {
     go('game', {level: 0, score: 0})
   })
 })
+
+function level_up(level, score ) {
+    // we never want them to be equal to num of maps, because
+    //  they'll hit an out of bounds if they do
+    if (level === (maps.length - 1)) {
+      go('win', {
+        score: score
+      })
+    } else {
+      play('levelUp', {
+        volume: 0.5,
+      })
+      go('game', {
+        level: (level + 1),
+        score: score
+      })
+    }
+}
 
 start('game', {level: 0, score: 0})
