@@ -18,7 +18,6 @@ const SNOWBALL_SPEED = 200
 const ENEMY_SPEED = 40
 const FALL_DEATH = 600
 let LEVEL_INDEX = args.level ?? 0
-let SCORE_GLOBAL = args.score ?? 0
 
 
 // load sprites
@@ -208,7 +207,7 @@ scene('menu', () => {
 
 let loseMusic, winMusic;
 // game scene
-scene('game', () => {
+scene('game', ({ level, score}) => {
 
   // introMusic.pause()
   // if (loseMusic) {
@@ -242,22 +241,22 @@ scene('game', () => {
     scale(1)
   ])
 
-  const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
+  const gameLevel = addLevel(maps[level], levelCfg)
 
   // add a score
-  const score = add([
-    text(SCORE_GLOBAL),
+  const scoreLabel = add([
+    text(score),
     pos(20, 6),
     layer('ui'),
     {
-      value: SCORE_GLOBAL,
+      value: score,
     },
     scale(2),
     // fixed()
   ])
 
   // add level numbers
-  const level = add([
+  add([
     text('level ' + parseInt(LEVEL_INDEX + 1)),
     pos(90, 6),
     {
@@ -278,7 +277,7 @@ scene('game', () => {
         volume: 0.8,
       })
       go('lose', {
-        score: SCORE_GLOBAL
+        score: scoreLabel.value
       })
     }
   })
@@ -463,8 +462,8 @@ scene('game', () => {
   // //     volume:0.5,
   // //   })
   // //   gameLevel.spawn('=', m.gridPos.sub(0,0))
-  // //   SCORE_GLOBAL+=15
-  // //   score.text = SCORE_GLOBAL
+  // //   scoreLabel.value +=15
+  // //   scoreLabel.text = scoreLabel.value
   // //   destroy(s)
   // // })
 
@@ -489,8 +488,8 @@ scene('game', () => {
       volume: 0.5,
     })
     destroy(g)
-    SCORE_GLOBAL += 10
-    score.text = SCORE_GLOBAL
+    scoreLabel.value += 10
+    scoreLabel.text = scoreLabel.value
   })
 
   // candy cane
@@ -499,8 +498,8 @@ scene('game', () => {
       volume: 0.5,
     })
     destroy(c)
-    SCORE_GLOBAL += 10
-    score.text = SCORE_GLOBAL
+    scoreLabel.value += 10
+    scoreLabel.text = scoreLabel
   })
 
   // bunny enemies
@@ -510,15 +509,15 @@ scene('game', () => {
         volume: 0.9,
       })
       destroy(b)
-      SCORE_GLOBAL += 5
-      score.text = SCORE_GLOBAL
+      scoreLabel.value += 5
+      scoreLabel.text = scoreLabel.value
     } else {
       play('runIntoEnemy', {
         volume: 0.5,
       })
       go('lose', {
         level: (LEVEL_INDEX),
-        score: SCORE_GLOBAL
+        score: scoreLabel.value
       })
     }
   })
@@ -530,15 +529,15 @@ scene('game', () => {
         volume: 0.9,
       })
       destroy(s)
-      SCORE_GLOBAL += 5
-      score.text = SCORE_GLOBAL
+      scoreLabel.value += 5
+      scoreLabel.text = scoreLabel.value
     } else {
       play('runIntoEnemy', {
         volume: 0.5,
       })
       go('lose', {
         level: (LEVEL_INDEX),
-        score: SCORE_GLOBAL
+        score: scoreLabel.value
       })
     }
   })
@@ -546,12 +545,12 @@ scene('game', () => {
   // lamp post 
   player.collides('post', (p) => {
     LEVEL_INDEX++
-    SCORE_GLOBAL += 100
-    score.text = SCORE_GLOBAL
+    scoreLabel.value += 100
+    scoreLabel.text = scoreLabel.value
     gameplayMusic.pause()
     if (LEVEL_INDEX > 2) {
       go('win', {
-        score: SCORE_GLOBAL
+        score: scoreLabel.value
       })
     } else {
       play('levelUp', {
@@ -559,14 +558,14 @@ scene('game', () => {
       })
       go('game', {
         level: level.value,
-        score: SCORE_GLOBAL
+        score: scoreLabel.value
       })
     }
   })
 })
 
 // lose scene  
-scene('lose', () => {
+scene('lose', ({level, score}) => {
 
   // gameplayMusic.pause()
 
@@ -585,7 +584,7 @@ scene('lose', () => {
   ])
 
   add([
-    text('Score: ' + SCORE_GLOBAL),
+    text('Score: ' + score),
     origin('center'),
     pos(388, 292),
     scale(5)
@@ -605,14 +604,12 @@ scene('lose', () => {
     play('mouseClick', {
       volume: 0.8,
     })
-    LEVEL_INDEX = 0
-    SCORE_GLOBAL = 0
-    go('game')
+    go('game', {level: 0, score: 0})
   })
 })
 
 // win scene
-scene('win', () => {
+scene('win', ({ level, score}) => {
 
   gameplayMusic.pause()
 
@@ -631,7 +628,7 @@ scene('win', () => {
   ])
 
   add([
-    text('Score: ' + SCORE_GLOBAL),
+    text('Score: ' + score),
     origin('center'),
     pos(388, 292),
     scale(.6)
@@ -651,10 +648,8 @@ scene('win', () => {
     play('mouseClick', {
       volume: 0.8,
     })
-    LEVEL_INDEX = 0
-    SCORE_GLOBAL = 0
-    go('game')
+    go('game', {level: 0, score: 0})
   })
 })
 
-start('game')
+start('game', {level: 0, score: 0})
