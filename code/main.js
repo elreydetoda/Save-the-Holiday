@@ -352,14 +352,14 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   })
 
   keyDown('up', () => {
-    spawnProjectile(player, 'magic')
+    player.shoot('magic')
   })
 
   keyDown('s', () => {
     play('shoot', {
       volume: 0.8,
     })
-    spawnProjectile(player, 'snowball')
+    player.shoot('snowball')
   })
 
   // add magic motion
@@ -395,11 +395,26 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
     if (s.pos.y < 0) {
       s.dir *= s.dir
     }
+    // s.projectile.seconds -= dt()
+    // if (s.projectile.seconds <= 0) {
+    //   every('s-enemy', (s_shoot) => {
+    //     if (s_shoot.lightning.throw) {
+    //       s_shoot.shoot('lightning')
+    //     }
+    //   })
+    //   s.projectile.seconds = 10
+    // }
     // setTimeout(() => {
-    //   if (s.lightning.throw){
-    //     s.shoot('lightning')
-    //   }
-    // }, (s.projectile.seconds * 1000)/ 2)
+    //   // console.log(s)
+    //   every('s-enemy', (sunbeam_arr) => {
+    //     sunbeam_arr.forEach((sunbeam, index, arr) => {
+    //       if (sunbeam.lightning.throw) {
+
+    //         sunbeam.shoot('lightning')
+    //       }
+    //     })
+    //   })
+    // }, (s.projectile.seconds * 1000) / 2)
 
   })
 
@@ -667,10 +682,6 @@ function big() {
   }
 }
 
-function spawnProjectile(player, proj_type) {
-  player.shoot(proj_type)
-}
-
 function projectiles() {
 
   // variables for handling restrictions
@@ -710,23 +721,24 @@ function projectiles() {
             pos(positioning),
             origin('center'),
             color(convertColor([44, 171, 77])),
-            // color(0.1725490196078431, 0.6705882352941176, 77),
             'magic',
             'projectile'
           ])
           this.magic.count++
           proj_thrown = true
         } else if (this.projectile.type === 'lightning' && this.lightning.throw) {
+          // TODO: actually implement this
           //TO-DO: use lightning image if possible
+          console.log(this)
           const proj = add([
             rect(3, 3),
-            // pos(positioning),
+            pos(this.pos.add(0, 0)),
             origin('bottom'),
             color(convertColor([255, 255, 0])),
-            // color(0.1725490196078431, 0.6705882352941176, 77),
-            'magic',
-            'projectile'
+            // 'magic',
+            // 'projectile'
           ])
+          console.log('reached')
           this.lightning.count++
           proj_thrown = true
         }
