@@ -3,7 +3,8 @@ kaboom(
   {
     width: 800,
     height: 500,
-    background: [179, 209, 249,],
+    // background: [179, 209, 249,], // take these values and put them over /255 get's values below
+    clearColor: [0.7019607843137255, 0.8196078431372549, 0.9764705882352941, 1],
     global: true,
   }
 );
@@ -17,8 +18,9 @@ const MAGIC_SPEED = 400
 const SNOWBALL_SPEED = 200
 const ENEMY_SPEED = 40
 const FALL_DEATH = 600
-let LEVEL_INDEX = args.level ?? 0
-let SCORE_GLOBAL = args.score ?? 0
+const scoreScale = 2
+// i.e. when you win or lose
+const conditionSceneTextScale = 5
 
 
 // load sprites
@@ -157,14 +159,14 @@ const levelCfg = {
   'z': () => [sprite('mystery-box2'), 'lightning-surprise', 'surprise-box', solid(), scale(0.35)],
   '\}': () => [sprite('unboxed'), solid(), scale(0.35)],
   '|': () => [sprite('lamp-post'), 'post', solid()],
-  '^': () => [sprite('bunny-enemy'), 'b-enemy', 'bleft', solid(), scale(0.2), body(), {dir: 1}],
-  'b': () => [sprite('bunny-enemy'), 'b-enemy', 'bright', solid(), scale(0.2), body(), {dir: 1}],
+  '^': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
+  'b': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
   '-': () => [sprite('block-2'), 'ground', 'melting', solid(), scale(0.35)],
   '_': () => [sprite('block-3'), 'ground', 'melting', solid(), scale(0.35)],
   'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
-  'w': () => [sprite('wingMan1'), 's-enemy', solid(), scale(0.3)],
+  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), { dir: 1 }],
 }
 
 let introMusic;
@@ -197,35 +199,29 @@ scene('menu', () => {
     'play'
   ])
 
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game')
+    go('game', { level: 0, score: 0, prev_music: introMusic })
   })
 
 })
 
-let loseMusic, winMusic;
 // game scene
-scene('game', () => {
+scene('game', ({ level, score, prev_music }) => {
 
-  // introMusic.pause()
-  // if (loseMusic) {
-  //   loseMusic.pause()
-  // }
-  // if (winMusic) {
-  //   winMusic.pause()
-  // }
+  prev_music.pause()
 
-  // // gameplay music
-  // gameplayMusic = play("gameplay", {
-  //   volume: 0.3,
-  //   loop: true
-  // })
+  // gameplay music
+  gameplayMusic = play("gameplay", {
+    volume: 0.3,
+    loop: true
+  })
 
   // add layers
-  layer(['bg','obj', 'ui'], 'obj')
+  layer(['bg', 'obj', 'ui'], 'obj')
 
   // variables
   let CURRENT_JUMP_FORCE = JUMP_FORCE
@@ -242,28 +238,28 @@ scene('game', () => {
     scale(1)
   ])
 
-  const gameLevel = addLevel(maps[LEVEL_INDEX], levelCfg)
+  const gameLevel = addLevel(maps[level], levelCfg)
 
   // add a score
-  const score = add([
-    text(SCORE_GLOBAL),
+  const scoreLabel = add([
+    text(score),
     pos(20, 6),
     layer('ui'),
     {
-      value: SCORE_GLOBAL,
+      value: score,
     },
-    scale(2),
+    scale(scoreScale),
     // fixed()
   ])
 
   // add level numbers
-  const level = add([
-    text('level ' + parseInt(LEVEL_INDEX + 1)),
+  add([
+    text('level ' + parseInt(level + 1)),
     pos(90, 6),
     {
-      value: LEVEL_INDEX,
+      value: level,
     },
-    scale(2),
+    scale(scoreScale),
     // fixed()
   ])
 
@@ -277,9 +273,7 @@ scene('game', () => {
       play('fallOff', {
         volume: 0.8,
       })
-      go('lose', {
-        score: SCORE_GLOBAL
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -316,18 +310,6 @@ scene('game', () => {
     spawnSnowBall(player.pos.add(0, -35))
   })
 
-  //TO-DO: use magic image if possible
-  // add magic casting
-  function spawnMagic(p) {
-    add([
-      rect(3, 3),
-      pos(p),
-      origin('center'),
-      color(44, 171, 77),
-      'magic'
-    ])
-  }
-
   // add magic motion
   action('magic', (m) => {
     m.move(0, -MAGIC_SPEED)
@@ -336,16 +318,6 @@ scene('game', () => {
     }
   })
 
-  // add snowball shooting
-  function spawnSnowBall(p) {
-    add([
-      rect(6,6),
-      pos(p),
-      origin('center'),
-      color(255, 255, 255),
-      'snowball'
-    ])
-  }
 
   // add snowball motion
   action('snowball', (s) => {
@@ -367,58 +339,15 @@ scene('game', () => {
 
   // add sunbeam enemy motion
   action('s-enemy', (s) => {
-    s.move(0, CURRENT_S_SPEED)
+    s.move(0, CURRENT_S_SPEED * s.dir)
     if (s.pos.y < 0) {
-      destroy(s)
+      s.dir *= s.dir
     }
   })
 
-  collides('b-enemy', 'tree', (b, t) => {
-    b.dir = -b.dir
-  })
-  collides('b-enemy', 'b-enemy', (b, t) => {
-    b.dir = -b.dir
-  })
+  /* -------------------------- COLLISIONS ------------------------ */
 
-
-  // make santa grow 
-  function big() {
-    let timer = 0
-    let isBig = false
-    return {
-      update() {
-        if (isBig) {
-          timer -= dt()
-          if (timer <= 0) {
-            this.smallify()
-          }
-        }
-      },
-      isBig() {
-        return isBig
-      },
-      smallify() {
-        play('shrink', {
-          volume: 0.8,
-        })
-        this.scale = vec2(.65)
-        timer = 0
-        isBig = false
-        CURRENT_JUMP_FORCE = JUMP_FORCE
-      },
-      biggify(time) {
-        play('grow', {
-          volume: 0.5,
-        })
-        this.scale = vec2(1)
-        timer = time
-        isBig = true
-        CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
-      }
-    }
-  }
-
-  // /* --------------- COLLISIONS -----------------*/
+  /* *********** santa projectile -> items block ************** */
 
   // -- magic collides with boxes -- 
   // surprise box - green present 
@@ -451,32 +380,39 @@ scene('game', () => {
     destroy(m)
   })
 
-  // regular block
-  collides('magic', 'block', (m, b) => {
-    destroy(m)
+  /* *********** santa projectile -> enemies ************** */
+
+  // -- enemies collide with objects --
+  // TO-DO: Change to box
+  collides('s-enemy', 'snowball', (e, s) => {
+    play('hitWithSnowBall')
+    destroy(e)
+    destroy(s)
   })
 
-  // // TO-DO: fix snowball area() bug 
-  // // snowball restore melting snow box
-  // // collides('snowball', 'melting', (s, m) => {
-  // //   play('hitWithSnowBall', {
-  // //     volume:0.5,
-  // //   })
-  // //   gameLevel.spawn('=', m.gridPos.sub(0,0))
-  // //   SCORE_GLOBAL+=15
-  // //   score.text = SCORE_GLOBAL
-  // //   destroy(s)
-  // // })
 
-  // // -- enemies collide with objects --
-  // // TO-DO: Change to box
-  // // collides('s-enemy', 'snowball', (e, s) => {
-  // //   play('hitWithSnowBall')
-  // //   destroy(e)
-  // //   destroy(s)
-  // // })
+  /* *********** santa projectile -> blocks ************** */
 
-  // -- player collides with objects --
+  // regular block
+  collides('projectile', 'block', (p, b) => {
+    destroy(p)
+  })
+
+  // snowball restore melting snow box
+  collides('snowball', 'melting', (s, m) => {
+    play('hitWithSnowBall', {
+      volume: 0.5,
+    })
+    gameLevel.spawn('=', m.gridPos.sub(0, 0))
+    destroy(s)
+    destroy(m)
+    scoreLabel.value += 15
+    scoreLabel.text = scoreLabel.value
+  })
+
+
+  /* *********** santa -> objects ************** */
+
   // blue lightning
   player.collides('lightning-blue', (b) => {
     player.biggify(7)
@@ -489,8 +425,8 @@ scene('game', () => {
       volume: 0.5,
     })
     destroy(g)
-    SCORE_GLOBAL += 10
-    score.text = SCORE_GLOBAL
+    scoreLabel.value += 10
+    scoreLabel.text = scoreLabel.value
   })
 
   // candy cane
@@ -499,9 +435,24 @@ scene('game', () => {
       volume: 0.5,
     })
     destroy(c)
-    SCORE_GLOBAL += 10
-    score.text = SCORE_GLOBAL
+    scoreLabel.value += 10
+    scoreLabel.text = scoreLabel.value
   })
+
+  /* *********** enemy collides -> object/block ************** */
+
+  collides('b-enemy', 'tree', (b, t) => {
+    b.dir = -b.dir
+  })
+  collides('b-enemy', 'b-enemy', (b, t) => {
+    b.dir = -b.dir
+  })
+  collides('s-enemy', 'ground', (s, g) => {
+    // maybe needs a bit more help to get off the ground?
+    // don't know what need to do *= ... 🙃
+    s.dir *= -s.dir
+  })
+
 
   // bunny enemies
   player.collides('b-enemy', (b) => {
@@ -510,16 +461,13 @@ scene('game', () => {
         volume: 0.9,
       })
       destroy(b)
-      SCORE_GLOBAL += 5
-      score.text = SCORE_GLOBAL
+      scoreLabel.value += 5
+      scoreLabel.text = scoreLabel.value
     } else {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      go('lose', {
-        level: (LEVEL_INDEX),
-        score: SCORE_GLOBAL
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -530,45 +478,28 @@ scene('game', () => {
         volume: 0.9,
       })
       destroy(s)
-      SCORE_GLOBAL += 5
-      score.text = SCORE_GLOBAL
+      scoreLabel.value += 5
+      scoreLabel.text = scoreLabel.value
     } else {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      go('lose', {
-        level: (LEVEL_INDEX),
-        score: SCORE_GLOBAL
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
   // lamp post 
   player.collides('post', (p) => {
-    LEVEL_INDEX++
-    SCORE_GLOBAL += 100
-    score.text = SCORE_GLOBAL
-    gameplayMusic.pause()
-    if (LEVEL_INDEX > 2) {
-      go('win', {
-        score: SCORE_GLOBAL
-      })
-    } else {
-      play('levelUp', {
-        volume: 0.5,
-      })
-      go('game', {
-        level: level.value,
-        score: SCORE_GLOBAL
-      })
-    }
+    scoreLabel.value += 100
+    scoreLabel.text = scoreLabel.value
+    level_up(level, scoreLabel.value, gameplayMusic)
   })
 })
 
 // lose scene  
-scene('lose', () => {
+scene('lose', ({ level, score, prev_music }) => {
 
-  // gameplayMusic.pause()
+  prev_music.pause()
 
   // lose scene music
   loseMusic = play("loseScene", {
@@ -585,10 +516,10 @@ scene('lose', () => {
   ])
 
   add([
-    text('Score: ' + SCORE_GLOBAL),
+    text('Score: ' + score),
     origin('center'),
     pos(388, 292),
-    scale(5)
+    scale(conditionSceneTextScale)
   ])
 
   add([
@@ -600,21 +531,20 @@ scene('lose', () => {
     area(),
     'play'
   ])
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     loseMusic.pause()
     play('mouseClick', {
       volume: 0.8,
     })
-    LEVEL_INDEX = 0
-    SCORE_GLOBAL = 0
-    go('game')
+    go('game', { level: 0, score: 0, prev_music: loseMusic })
   })
 })
 
 // win scene
-scene('win', () => {
+scene('win', ({ level, score, prev_music }) => {
 
-  gameplayMusic.pause()
+  prev_music.pause()
 
   // win scene music
   winMusic = play("winScene", {
@@ -631,10 +561,10 @@ scene('win', () => {
   ])
 
   add([
-    text('Score: ' + SCORE_GLOBAL),
+    text('Score: ' + score),
     origin('center'),
     pos(388, 292),
-    scale(.6)
+    scale(conditionSceneTextScale)
   ])
 
   add([
@@ -646,15 +576,113 @@ scene('win', () => {
     area(),
     'play'
   ])
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     winMusic.pause()
     play('mouseClick', {
       volume: 0.8,
     })
-    LEVEL_INDEX = 0
-    SCORE_GLOBAL = 0
-    go('game')
+    go('game', { level: 0, score: 0, prev_music: winMusic })
   })
 })
 
-start('game')
+/* ************************ all functions ************************** */
+
+/* *********** santa ************** */
+// make santa grow 
+function big() {
+  let timer = 0
+  let isBig = false
+  return {
+    update() {
+      if (isBig) {
+        timer -= dt()
+        if (timer <= 0) {
+          this.smallify()
+        }
+      }
+    },
+    isBig() {
+      return isBig
+    },
+    smallify() {
+      play('shrink', {
+        volume: 0.8,
+      })
+      this.scale = vec2(.65)
+      timer = 0
+      isBig = false
+      CURRENT_JUMP_FORCE = JUMP_FORCE
+    },
+    biggify(time) {
+      play('grow', {
+        volume: 0.5,
+      })
+      this.scale = vec2(1)
+      timer = time
+      isBig = true
+      CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
+    }
+  }
+}
+
+// add snowball shooting
+function spawnSnowBall(p) {
+  add([
+    rect(6, 6),
+    pos(p),
+    origin('center'),
+    color(255, 255, 255),
+    'snowball',
+    'projectile'
+  ])
+}
+
+//TO-DO: use magic image if possible
+// add magic casting
+function spawnMagic(p) {
+  add([
+    rect(3, 3),
+    pos(p),
+    origin('center'),
+    color(44, 171, 77),
+    'magic',
+    'projectile'
+  ])
+}
+
+
+/* *********** utility ************** */
+
+function level_up(level, score, music) {
+  // we never want them to be equal to num of maps, because
+  //  they'll hit an out of bounds if they do
+  if (level === (maps.length - 1)) {
+    go('win', {
+      level: level,
+      score: score,
+      prev_music: music
+    })
+  } else {
+    play('levelUp', {
+      volume: 0.5,
+    })
+    go('game', {
+      level: (level + 1),
+      score: score,
+      prev_music: music
+    })
+  }
+}
+
+function died(level, score, music) {
+
+  go('lose', {
+    level: level,
+    score: score,
+    prev_music: music
+  })
+
+}
+
+start('menu')
