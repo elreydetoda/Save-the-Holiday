@@ -273,7 +273,7 @@ scene('game', ({ level, score, prev_music }) => {
       play('fallOff', {
         volume: 0.8,
       })
-      died( level, scoreLabel.value, gameplayMusic)
+      died(level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -467,7 +467,7 @@ scene('game', ({ level, score, prev_music }) => {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      died( level, scoreLabel.value, gameplayMusic)
+      died(level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -484,7 +484,7 @@ scene('game', ({ level, score, prev_music }) => {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      died( level, scoreLabel.value, gameplayMusic)
+      died(level, scoreLabel.value, gameplayMusic)
     }
   })
 
