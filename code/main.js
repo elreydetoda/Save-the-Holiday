@@ -166,7 +166,7 @@ const levelCfg = {
   'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
-  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), { dir: 1}],
+  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), { dir: 1 }],
 }
 
 let introMusic;
@@ -204,28 +204,21 @@ scene('menu', () => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 0, score: 0})
+    go('game', { level: 0, score: 0, prev_music: introMusic })
   })
 
 })
 
-let loseMusic, winMusic;
 // game scene
-scene('game', ({ level, score }) => {
+scene('game', ({ level, score, prev_music }) => {
 
-  // introMusic.pause()
-  // if (loseMusic) {
-  //   loseMusic.pause()
-  // }
-  // if (winMusic) {
-  //   winMusic.pause()
-  // }
+  prev_music.pause()
 
-  // // gameplay music
-  // gameplayMusic = play("gameplay", {
-  //   volume: 0.3,
-  //   loop: true
-  // })
+  // gameplay music
+  gameplayMusic = play("gameplay", {
+    volume: 0.3,
+    loop: true
+  })
 
   // add layers
   layer(['bg', 'obj', 'ui'], 'obj')
@@ -280,9 +273,7 @@ scene('game', ({ level, score }) => {
       play('fallOff', {
         volume: 0.8,
       })
-      go('lose', {
-        score: scoreLabel.value
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -410,12 +401,12 @@ scene('game', ({ level, score }) => {
   // snowball restore melting snow box
   collides('snowball', 'melting', (s, m) => {
     play('hitWithSnowBall', {
-      volume:0.5,
+      volume: 0.5,
     })
-    gameLevel.spawn('=', m.gridPos.sub(0,0))
+    gameLevel.spawn('=', m.gridPos.sub(0, 0))
     destroy(s)
     destroy(m)
-    scoreLabel.value +=15
+    scoreLabel.value += 15
     scoreLabel.text = scoreLabel.value
   })
 
@@ -476,10 +467,7 @@ scene('game', ({ level, score }) => {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      go('lose', {
-        level: (level),
-        score: scoreLabel.value
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -496,10 +484,7 @@ scene('game', ({ level, score }) => {
       play('runIntoEnemy', {
         volume: 0.5,
       })
-      go('lose', {
-        level: (level),
-        score: scoreLabel.value
-      })
+      died( level, scoreLabel.value, gameplayMusic)
     }
   })
 
@@ -508,14 +493,14 @@ scene('game', ({ level, score }) => {
     scoreLabel.value += 100
     scoreLabel.text = scoreLabel.value
     // gameplayMusic.pause()
-    level_up(level, scoreLabel.value)
+    level_up(level, scoreLabel.value, gameplayMusic)
   })
 })
 
 // lose scene  
-scene('lose', ({ level, score }) => {
+scene('lose', ({ level, score, prev_music }) => {
 
-  // gameplayMusic.pause()
+  prev_music.pause()
 
   // lose scene music
   loseMusic = play("loseScene", {
@@ -553,14 +538,14 @@ scene('lose', ({ level, score }) => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 0, score: 0 })
+    go('game', { level: 0, score: 0, prev_music: loseMusic })
   })
 })
 
 // win scene
-scene('win', ({ level, score }) => {
+scene('win', ({ level, score, prev_music }) => {
 
-  // gameplayMusic.pause()
+  prev_music.pause()
 
   // win scene music
   winMusic = play("winScene", {
@@ -598,7 +583,7 @@ scene('win', ({ level, score }) => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 0, score: 0 })
+    go('game', { level: 0, score: 0, prev_music: winMusic })
   })
 })
 
@@ -670,12 +655,14 @@ function spawnMagic(p) {
 
 /* *********** utility ************** */
 
-function level_up(level, score) {
+function level_up(level, score, music) {
   // we never want them to be equal to num of maps, because
   //  they'll hit an out of bounds if they do
   if (level === (maps.length - 1)) {
     go('win', {
-      score: score
+      level: level,
+      score: score,
+      prev_music: music
     })
   } else {
     play('levelUp', {
@@ -683,9 +670,20 @@ function level_up(level, score) {
     })
     go('game', {
       level: (level + 1),
-      score: score
+      score: score,
+      prev_music: music
     })
   }
+}
+
+function died(level, score, music) {
+
+  go('lose', {
+    level: level,
+    score: score,
+    prev_music: music
+  })
+
 }
 
 start('menu')
