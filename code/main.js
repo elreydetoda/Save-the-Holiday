@@ -492,7 +492,6 @@ scene('game', ({ level, score, prev_music }) => {
   player.collides('post', (p) => {
     scoreLabel.value += 100
     scoreLabel.text = scoreLabel.value
-    // gameplayMusic.pause()
     level_up(level, scoreLabel.value, gameplayMusic)
   })
 })
