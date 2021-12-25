@@ -454,30 +454,13 @@ scene('game', ({ level, score, prev_music }) => {
   })
 
 
-  // bunny enemies
-  player.collides('b-enemy', (b) => {
+  // bunny and sunbeam enemies
+  player.collides('enemy', (e) => {
     if (isJumping) {
       play('jumpOnEnemy', {
         volume: 0.9,
       })
-      destroy(b)
-      scoreLabel.value += 5
-      scoreLabel.text = scoreLabel.value
-    } else {
-      play('runIntoEnemy', {
-        volume: 0.5,
-      })
-      died(level, scoreLabel.value, gameplayMusic)
-    }
-  })
-
-  // sunbeam enemies
-  player.collides('s-enemy', (s) => {
-    if (isJumping) {
-      play('jumpOnEnemy', {
-        volume: 0.9,
-      })
-      destroy(s)
+      destroy(e)
       scoreLabel.value += 5
       scoreLabel.text = scoreLabel.value
     } else {
