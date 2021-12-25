@@ -23,7 +23,29 @@
 	</style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
-
+<header>
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">Play</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Credits</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+      </nav>
+</header>
 <body>
 <br />
 <h1>Game Story</h1>
@@ -41,11 +63,9 @@
 [A] <img src="sprites/mystery-box2.png" alt="Magic">
 [B] <img src="sprites/block-2.png" alt="Magic">
 [C] <img src="sprites/block-4.png" alt="Magic">
-[D] <img src="sprites/magic3.png" alt="Magic">
-[E] <img src="sprites/snowball.png" alt="Snowball">
 <br /><br />
 <p><strong>Use Santa's magic wand to reveal secret gifts and shoot snowballs!</strong></p>
-<p>You'll see boxes containing gifts [A], and you can use your magic [D] with the <strong>^ arrow</strong> 
+<p>You'll see boxes containing gifts [A], and you can use your magic with the <strong>^ arrow</strong> 
     to open the gift box and reveal the presents or candy canes. You can shoot snowballs with the <strong>S</strong> to destroy 
     flying sunbeams and heal the melting ice [B] as you go. The more ice you restore to its solid winter state [C],
     the more points you can earn! 
@@ -53,12 +73,12 @@
 
 <br />
 
-[F] <img src="sprites/candy-cane2.png" alt="Candy Cane">
-[G] <img src="sprites/present.png" alt="Green Present">
-[H] <img src="sprites/present2.png" alt="Blue Present">
-[I] <img src="sprites/lightning-blue.png" alt="Icicle">
+[D] <img src="sprites/candy-cane2.png" alt="Candy Cane">
+[E] <img src="sprites/present.png" alt="Green Present">
+[F] <img src="sprites/present2.png" alt="Blue Present">
+[G] <img src="sprites/lightning-blue.png" alt="Icicle">
 <p><strong>Jump around platforms to collect icicles and gifts!</strong></p>
-<p>When you use your magic on gift boxes, you will see an icicle [I], a candy cane [F], or one of the presents [G, H]
+<p>When you use your magic on gift boxes, you will see a candy cane [D], an icicle [G], or one of the presents [E, F]
     appear on top of the box. You can jump with the <strong>space bar</strong> to reach platforms and get to items. The icicles will 
     help you grow larger and jump higher, but you have to be quick! It will only last for a limited 
     time. As santa, your job is to collect alll the gifts the bunnies stole. Each gift item you collect
@@ -67,10 +87,10 @@
 
 <br />
 
-[J] <img src="sprites/bunny-enemy.png" alt="Bunny">
-[K] <img src="sprites/wingMan1.png" alt="Sunbeam">
+[H] <img src="sprites/bunny-enemy.png" alt="Bunny">
+[I] <img src="sprites/wingMan1.png" alt="Sun beam">
 <p><strong>Avoid mischievous bunnies and flying sunbeams to reach the next level!</strong></p>
-<p>Bunnies [J] are ground-bound and will move left and right around the platforms, and sun beams [K] are air-bound
+<p>Bunnies [H] are ground-bound and will move left and right around the platforms, and sun beams [I] are air-bound
     and will fly up and down around the platforms. You can destroy both enemy types by jumping on them, but you 
     can also destroy sun beams with your snowballs. Watch out for the sun beams zaps! They can kill you and 
     melt the ice. Each enemy you destroy will earn you more points!
@@ -78,9 +98,9 @@
 
 <br />
 
-<img src="sprites/lamp-post.png" alt="Lamp Post">
+[J] <img src="sprites/lamp-post.png" alt="Lamp Post">
 <p><strong>Approach lamps to go to the next level!</strong></p>
-<p>When you've collected all the gifts and destroyed all the enemies you can, head to the lamp post!
+<p>When you've collected all the gifts and destroyed all the enemies you can, head to the lamp post [J]!
     You will be transported to the next level and earn points for this accomplishment. Make sure you can get 
     to the North Pole before the sun beams melt all the ice!
 </p>
@@ -91,19 +111,35 @@
 
 <p>Our second release has come with many bug fixes and some awesome new features! This time around, 
     we have reverted our Kaboom JS version to a more stable release that allowed better use of collision functions 
-    and much more. After rewriting our game to use the older version of Kaboom JS, we were able to implement:  
+    and much more. After rewriting our game to use the older version of Kaboom JS, we were able to implement the following.  
 </p>
+<strong>Added Functionality:</strong>
 <ul>
-    <li>Improved enemy movement</li>
+    <li>Improved and continuous enemy movement</li>
     <li>Improved level design</li>
     <li>Ability to freeze boxes to save the ice</li>
     <li>Ability to destroy sun beams with snowballs</li>
     <li>Limited casting rates for magic and snowballs</li>
-    <li></li>
-    <li></li>
-    <li></li>
-
+    <li>Sun beams fire zaps at the player</li>
 </ul>
+
+<strong>Bug Fixes from v1.0.0:</strong>
+<ul>
+    <li>Object collision errors</li>
+    <li>Music looping into other scenes</li>
+    <li>Unlimited jumping</li>
+    <li>Magic and Snowball casting rates</li>
+</ul>
+
+<br /><br />
+
+<h1>Hackathons</h1>
+
+<p>Our initial inspiration came from participating in the <a href="https://hackcoming.devpost.com/" target="_blank"><strong>Hackcoming Hackathon</strong></a> from MLH in early December, 2021, 
+    where we released version 1.0.0. We created version 2.0.0 for the <a href="https://hackywinterland.devpost.com/" target="_blank"><strong>Hacky Winterland Hackathon</strong></a> from MLH during Christmas 
+    weekend, 2021. You can see the game's hackathon submissions here: <a href="https://devpost.com/software/save-the-holiday" target="_blank">v1.0.0</a>, 
+    <a href="https://devpost.com/software/save-the-holiday-7wbxsp" target="_blank">v2.0.0</a>  
+</p>
 
 <br /><br />
 
@@ -125,7 +161,7 @@
 
 </body>
 <footer>
-    @Copyright 2021
+    Copyright &copy; 2021 Save the Holiday. All rights reserved.
 </footer>
 
 </html>
