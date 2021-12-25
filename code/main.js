@@ -199,11 +199,12 @@ scene('menu', () => {
     'play'
   ])
 
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game')
+    go('game', { level: 0, score: 0})
   })
 
 })
@@ -546,7 +547,8 @@ scene('lose', ({ level, score }) => {
     area(),
     'play'
   ])
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     loseMusic.pause()
     play('mouseClick', {
       volume: 0.8,
@@ -590,7 +592,8 @@ scene('win', ({ level, score }) => {
     area(),
     'play'
   ])
-  clicks('play', (p) => {
+  // TODO: figure out how to detect which object is clicked
+  mouseClick(() => {
     winMusic.pause()
     play('mouseClick', {
       volume: 0.8,
@@ -685,4 +688,4 @@ function level_up(level, score) {
   }
 }
 
-start('game', { level: 2, score: 0 })
+start('menu')
