@@ -159,14 +159,14 @@ const levelCfg = {
   'z': () => [sprite('mystery-box2'), 'lightning-surprise', 'surprise-box', solid(), scale(0.35)],
   '\}': () => [sprite('unboxed'), solid(), scale(0.35)],
   '|': () => [sprite('lamp-post'), 'post', solid()],
-  '^': () => [sprite('bunny-enemy'), 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
-  'b': () => [sprite('bunny-enemy'), 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
+  '^': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
+  'b': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
   '-': () => [sprite('block-2'), 'ground', 'melting', solid(), scale(0.35)],
   '_': () => [sprite('block-3'), 'ground', 'melting', solid(), scale(0.35)],
   'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
-  'w': () => [sprite('wingMan1'), 's-enemy', solid(), scale(0.3)],
+  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), { dir: 1}],
 }
 
 let introMusic;
@@ -347,21 +347,15 @@ scene('game', ({ level, score }) => {
 
   // add sunbeam enemy motion
   action('s-enemy', (s) => {
-    s.move(0, CURRENT_S_SPEED)
+    s.move(0, CURRENT_S_SPEED * s.dir)
     if (s.pos.y < 0) {
-      destroy(s)
+      s.dir *= s.dir
     }
   })
 
-  collides('b-enemy', 'tree', (b, t) => {
-    b.dir = -b.dir
-  })
-  collides('b-enemy', 'b-enemy', (b, t) => {
-    b.dir = -b.dir
-  })
+  /* -------------------------- COLLISIONS ------------------------ */
 
-
-  // /* --------------- COLLISIONS -----------------*/
+  /* *********** santa projectile -> items block ************** */
 
   // -- magic collides with boxes -- 
   // surprise box - green present 
@@ -394,32 +388,39 @@ scene('game', ({ level, score }) => {
     destroy(m)
   })
 
-  // regular block
-  collides('magic', 'block', (m, b) => {
-    destroy(m)
+  /* *********** santa projectile -> enemies ************** */
+
+  // -- enemies collide with objects --
+  // TO-DO: Change to box
+  collides('s-enemy', 'snowball', (e, s) => {
+    play('hitWithSnowBall')
+    destroy(e)
+    destroy(s)
   })
 
-  // // TO-DO: fix snowball area() bug 
-  // // snowball restore melting snow box
-  // // collides('snowball', 'melting', (s, m) => {
-  // //   play('hitWithSnowBall', {
-  // //     volume:0.5,
-  // //   })
-  // //   gameLevel.spawn('=', m.gridPos.sub(0,0))
-  // //   scoreLabel.value +=15
-  // //   scoreLabel.text = scoreLabel.value
-  // //   destroy(s)
-  // // })
 
-  // // -- enemies collide with objects --
-  // // TO-DO: Change to box
-  // // collides('s-enemy', 'snowball', (e, s) => {
-  // //   play('hitWithSnowBall')
-  // //   destroy(e)
-  // //   destroy(s)
-  // // })
+  /* *********** santa projectile -> blocks ************** */
 
-  // -- player collides with objects --
+  // regular block
+  collides('projectile', 'block', (p, b) => {
+    destroy(p)
+  })
+
+  // snowball restore melting snow box
+  collides('snowball', 'melting', (s, m) => {
+    play('hitWithSnowBall', {
+      volume:0.5,
+    })
+    gameLevel.spawn('=', m.gridPos.sub(0,0))
+    destroy(s)
+    destroy(m)
+    scoreLabel.value +=15
+    scoreLabel.text = scoreLabel.value
+  })
+
+
+  /* *********** santa -> objects ************** */
+
   // blue lightning
   player.collides('lightning-blue', (b) => {
     player.biggify(7)
@@ -443,8 +444,23 @@ scene('game', ({ level, score }) => {
     })
     destroy(c)
     scoreLabel.value += 10
-    scoreLabel.text = scoreLabel
+    scoreLabel.text = scoreLabel.value
   })
+
+  /* *********** enemy collides -> object/block ************** */
+
+  collides('b-enemy', 'tree', (b, t) => {
+    b.dir = -b.dir
+  })
+  collides('b-enemy', 'b-enemy', (b, t) => {
+    b.dir = -b.dir
+  })
+  collides('s-enemy', 'ground', (s, g) => {
+    // maybe needs a bit more help to get off the ground?
+    // don't know what need to do *= ... 🙃
+    s.dir *= -s.dir
+  })
+
 
   // bunny enemies
   player.collides('b-enemy', (b) => {
@@ -630,7 +646,8 @@ function spawnSnowBall(p) {
     pos(p),
     origin('center'),
     color(255, 255, 255),
-    'snowball'
+    'snowball',
+    'projectile'
   ])
 }
 
@@ -642,7 +659,8 @@ function spawnMagic(p) {
     pos(p),
     origin('center'),
     color(44, 171, 77),
-    'magic'
+    'magic',
+    'projectile'
   ])
 }
 
@@ -667,4 +685,4 @@ function level_up(level, score) {
   }
 }
 
-start('game', { level: 0, score: 0 })
+start('game', { level: 2, score: 0 })
