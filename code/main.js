@@ -22,6 +22,12 @@ const scoreScale = 2
 // i.e. when you win or lose
 const conditionSceneTextScale = 5
 
+// variables
+let CURRENT_JUMP_FORCE = JUMP_FORCE
+let CURRENT_E_SPEED = -ENEMY_SPEED
+let CURRENT_S_SPEED = ENEMY_SPEED
+let isJumping = true
+
 
 // load sprites
 loadSprite("santa", "sprites/santa.png");
@@ -223,12 +229,6 @@ scene('game', ({ level, score, prev_music }) => {
   // add layers
   layer(['bg', 'obj', 'ui'], 'obj')
 
-  // variables
-  let CURRENT_JUMP_FORCE = JUMP_FORCE
-  let CURRENT_E_SPEED = -ENEMY_SPEED
-  let CURRENT_S_SPEED = ENEMY_SPEED
-  let isJumping = true
-
   // add background
   add([
     sprite('environment'),
@@ -296,6 +296,7 @@ scene('game', ({ level, score, prev_music }) => {
     if (player.grounded()) {
       isJumping = true
       player.jump(CURRENT_JUMP_FORCE)
+      console.log(CURRENT_JUMP_FORCE)
     }
   })
 
@@ -454,30 +455,13 @@ scene('game', ({ level, score, prev_music }) => {
   })
 
 
-  // bunny enemies
-  player.collides('b-enemy', (b) => {
+  // bunny and sunbeam enemies
+  player.collides('enemy', (e) => {
     if (isJumping) {
       play('jumpOnEnemy', {
         volume: 0.9,
       })
-      destroy(b)
-      scoreLabel.value += 5
-      scoreLabel.text = scoreLabel.value
-    } else {
-      play('runIntoEnemy', {
-        volume: 0.5,
-      })
-      died(level, scoreLabel.value, gameplayMusic)
-    }
-  })
-
-  // sunbeam enemies
-  player.collides('s-enemy', (s) => {
-    if (isJumping) {
-      play('jumpOnEnemy', {
-        volume: 0.9,
-      })
-      destroy(s)
+      destroy(e)
       scoreLabel.value += 5
       scoreLabel.text = scoreLabel.value
     } else {
@@ -622,6 +606,7 @@ function big() {
       timer = time
       isBig = true
       CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
+      console.log(CURRENT_JUMP_FORCE)
     }
   }
 }
