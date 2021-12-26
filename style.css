@@ -63,7 +63,7 @@ html {
 
 .header {
   padding: 1rem 2rem;
-  background-color: #e3f2fd;
+  background-color: #0951ac;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -184,6 +184,41 @@ html {
 .play__list--item img {
   max-width: 100%;
 }
+
+/* ************* NEW VERSION  ************ */
+
+.section-new_version{
+  padding: 3rem 5rem;
+  font-size: 1.5rem;
+}
+
+.new-version__content {
+  margin-bottom: 2rem;
+}
+
+.new-version__changed--box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr );
+  align-content: center;
+  justify-items: start;
+  margin: 2rem 0;
+  column-gap: 2rem;
+  row-gap: 1rem;
+
+}
+
+@media (max-width: 38em) {
+.new-version__changed--box {
+  grid-template-columns: repeat(1, 1fr );
+}
+
+}
+
+.new-version__changed--box ul li{
+  margin-left: 3rem;
+}
+
+
 /* html,
 footer {
   background: rgb(139, 146, 155);
