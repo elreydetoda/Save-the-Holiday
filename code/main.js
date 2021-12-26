@@ -20,7 +20,7 @@ const ENEMY_SPEED = 40
 const FALL_DEATH = 600
 const scoreScale = 2
 // i.e. when you win or lose
-const conditionSceneTextScale = 5
+const conditionSceneTextScale = 3
 
 // variables
 let CURRENT_JUMP_FORCE = JUMP_FORCE
