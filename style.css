@@ -332,7 +332,7 @@ footer {
 }
 
 .section-game-extras {
-
+  padding: 3rem 0;
 }
 
 .sprites__box {
@@ -345,4 +345,11 @@ footer {
 
 .sprites__box img {
   flex-basis: 4rem;
+}
+.sprites__text {
+  font-size: 1.5rem;
+}
+
+.sprites__text--section {
+  margin-bottom: 1rem;
 }
