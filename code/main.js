@@ -174,7 +174,18 @@ const levelCfg = {
   'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
-  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), { dir: 1 }],
+  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), projectiles(), {
+    dir: 1,
+    lightning: {
+      count: 0,
+      throw: true
+    },
+    projectile: {
+      seconds: 10,
+      type: '',
+      count: 1
+    }
+  }],
 }
 
 let introMusic;
@@ -212,7 +223,7 @@ scene('menu', () => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 0, score: 0, prev_music: introMusic })
+    go('game', { level: 2, score: 0, prev_music: introMusic })
   })
 
 })
@@ -282,7 +293,30 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   ])
 
   // add player
-  const player = add([sprite('santa'), pos(50, 0), body(), big(), scale(.65), origin('bot')])
+  const player = add([
+    sprite('santa'),
+    pos(50, 0),
+    body(),
+    big(),
+    projectiles(),
+    scale(.65),
+    origin('bot'),
+    {
+      snowball: {
+        count: 0,
+        throw: true
+      },
+      magic: {
+        count: 0,
+        throw: true
+      },
+      projectile: {
+        seconds: 1,
+        type: '',
+        count: 10
+      }
+    }
+  ])
 
   // add camera movement
   player.action(() => {
@@ -314,19 +348,18 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
     if (player.grounded()) {
       isJumping = true
       player.jump(CURRENT_JUMP_FORCE)
-     // console.log(CURRENT_JUMP_FORCE)
     }
   })
 
   keyDown('up', () => {
-    spawnMagic(player.pos.add(0, -35))
+    spawnProjectile(player, 'magic')
   })
 
   keyDown('s', () => {
     play('shoot', {
       volume: 0.8,
     })
-    spawnSnowBall(player.pos.add(0, -35))
+    spawnProjectile(player, 'snowball')
   })
 
   // add magic motion
@@ -362,6 +395,12 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
     if (s.pos.y < 0) {
       s.dir *= s.dir
     }
+    // setTimeout(() => {
+    //   if (s.lightning.throw){
+    //     s.shoot('lightning')
+    //   }
+    // }, (s.projectile.seconds * 1000)/ 2)
+
   })
 
   /* -------------------------- COLLISIONS ------------------------ */
@@ -624,35 +663,127 @@ function big() {
       timer = time
       isBig = true
       CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
-      console.log(CURRENT_JUMP_FORCE)
     }
   }
 }
 
-// add snowball shooting
-function spawnSnowBall(p) {
-  add([
-    rect(6, 6),
-    pos(p),
-    origin('center'),
-    color(255, 255, 255),
-    'snowball',
-    'projectile'
-  ])
+function spawnProjectile(player, proj_type) {
+  player.shoot(proj_type)
 }
 
-//TO-DO: use magic image if possible
-// add magic casting
-function spawnMagic(p) {
-  add([
-    rect(3, 3),
-    pos(p),
-    origin('center'),
-    color(44, 171, 77),
-    'magic',
-    'projectile'
-  ])
+function projectiles() {
+
+  // variables for handling restrictions
+  let isShooting = false;
+
+
+  return {
+    update() {
+      if (isShooting) {
+
+        // variables for created objects
+        const positioning = this.pos.add(-13, -55)
+        let proj_thrown = false
+
+        if (this[this.projectile.type].count > this.projectile.count) {
+          this[this.projectile.type].throw = false
+        } else {
+          this[this.projectile.type].throw = true
+        }
+
+        if (this.projectile.type === 'snowball' && this.snowball.throw) {
+          const proj = add([
+            rect(6, 6),
+            pos(positioning),
+            origin('center'),
+            // color(255, 255, 255),
+            color(1, 1, 1),
+            'snowball',
+            'projectile'
+          ])
+          this.snowball.count++
+          proj_thrown = true
+        } else if (this.projectile.type === 'magic' && this.magic.throw) {
+          //TO-DO: use magic image if possible
+          const proj = add([
+            rect(3, 3),
+            pos(positioning),
+            origin('center'),
+            color(convertColor([44, 171, 77])),
+            // color(0.1725490196078431, 0.6705882352941176, 77),
+            'magic',
+            'projectile'
+          ])
+          this.magic.count++
+          proj_thrown = true
+        } else if (this.projectile.type === 'lightning' && this.lightning.throw) {
+          //TO-DO: use lightning image if possible
+          const proj = add([
+            rect(3, 3),
+            // pos(positioning),
+            origin('bottom'),
+            color(convertColor([255, 255, 0])),
+            // color(0.1725490196078431, 0.6705882352941176, 77),
+            'magic',
+            'projectile'
+          ])
+          this.lightning.count++
+          proj_thrown = true
+        }
+
+        if (proj_thrown) {
+          let player_obj = this
+          setTimeout(function () {
+            player_obj[player_obj.projectile.type].count--
+          }, (player_obj.projectile.seconds * 1000))
+        }
+        isShooting = false
+      }
+    },
+    isShooting() {
+      return isShooting
+    },
+    shoot(proj_type) {
+      isShooting = true
+      this.projectile.type = proj_type
+    }
+  }
+
+  // if (timer) {
+  //   timer -= dt()
+  //   if (timer <= 0) {
+  //     console.log('its time')
+  //   }
+  // }
 }
+
+function convertColor(color_arr) {
+  // convert ot decimal version needed for rgb/a function
+  color_arr.forEach((num, index, arr) => {
+    arr[index] = num / 255
+  })
+  if (color_arr.length === 3) {
+    return_color = rgb(color_arr[0], color_arr[1], color_arr[2])
+  } else {
+    return_color = rgb(color_arr[0], color_arr[1], color_arr[2], color_arr[3])
+  }
+  return return_color
+}
+
+// function checkLimit(objToCheck, base, limit) {
+//   if (Number.isInteger(objToCheck)) {
+
+//     if (objToCheck === 0) {
+//       // resetting object to limit
+//       objToCheck = limit
+//     }
+
+//   } else {
+//     // meant it wasn't defined yet, so defining
+//     objToCheck = base
+//   }
+//   return objToCheck
+// }
 
 
 /* *********** utility ************** */
