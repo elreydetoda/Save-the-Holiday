@@ -311,3 +311,21 @@ footer {
 .home-body {
   background-color: cornflowerblue;
 }
+
+/* CREDITS PAGE */
+
+.section-creators {
+  padding: 3rem 0;
+}
+
+.creators__box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: start;
+  align-items: center;
+  gap: 2rem;
+}
+
+.creators__item--img {
+  justify-self: center;
+}
