@@ -359,6 +359,15 @@ footer {
 .play-page__box {
   display: flex;
   align-items: center;
+  align-self: end;
   gap: 1rem;
   justify-content: center;
+  justify-self: start;
+  padding-left: 7rem;
+  color: white;
+  font-size: 2rem;
+}
+
+.exit-game {
+  color: white !important;
 }
