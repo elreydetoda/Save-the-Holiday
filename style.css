@@ -116,11 +116,22 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 6.9rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  /* background-color: rgba(255, 255, 255, 0.97); */
+  z-index: 999;
+  box-shadow: 0 1.2rem 3.2rem rgba(0, 0, 0, 0.03);
 }
 
 .header__logo {
   max-width: 30%;
 }
+
 
 /* ************* NAVIGATION ************ */
 
@@ -165,6 +176,7 @@ footer {
   background-image: url("sprites/environment.png");
   background-size: cover;
   background-position: center;
+  margin-top: 6.9rem;
 }
 
 .hero {
