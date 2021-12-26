@@ -36,8 +36,7 @@
 		<div class="home-body">
 			<img src="" alt="Game GIF" id="gameGIF" >
 		</div>
-
-		<audio id="home-pg-audio" src="sounds/introMusic.mp3" loop="loop"></audio>
+		<audio id="home-pg-audio" src="sounds/home-pg-audio.mp3" loop="loop"></audio>
 	</main>
     <footer class="home-footer">
         Copyright &copy; 2021 Save the Holiday! All rights reserved.
@@ -63,7 +62,12 @@
 		}
 	}, 1000);
 
+	var homeAudio = document.getElementById("home-pg-audio");
+	homeAudio.volume = 0.1;
+
 	window.onload = function() {
 		document.getElementById("home-pg-audio").play();
+		// play(homeMusic);
+		
 	}
 </script>
