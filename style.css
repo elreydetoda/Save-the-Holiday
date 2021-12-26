@@ -304,6 +304,13 @@ footer {
 .home-body {
   background-color: rgb(179, 209, 249);
   height: 91vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-body img {
+  max-width: 40%;
 }
 
 .home-footer {
