@@ -27,6 +27,7 @@ let CURRENT_JUMP_FORCE = JUMP_FORCE
 let CURRENT_E_SPEED = -ENEMY_SPEED
 let CURRENT_S_SPEED = ENEMY_SPEED
 let isJumping = true
+let playerLives = 3
 
 
 // load sprites
@@ -63,6 +64,7 @@ loadSprite("instructions", "sprites/instructions.png");
 loadSprite("win-scene", "sprites/win-scene.png");
 loadSprite("lose-scene", "sprites/lose-scene.png");
 // loadPedit("enemy", "sprites/enemy.pedit");
+loadSprite("santa-head", "sprites/santa-head.png");
 
 // load sounds
 loadSound("collectGift", "sounds/collectGift.mp3");
@@ -240,10 +242,12 @@ scene('game', ({ level, score, prev_music }) => {
 
   const gameLevel = addLevel(maps[level], levelCfg)
 
+  let lifeSpacing = 150
+
   // add a score
   const scoreLabel = add([
     text(score),
-    pos(20, 6),
+    pos((lifeSpacing + 80), 6),
     layer('ui'),
     {
       value: score,
@@ -252,10 +256,21 @@ scene('game', ({ level, score, prev_music }) => {
     // fixed()
   ])
 
+  // add lives
+  for (x = 0; x < playerLives; x++) {
+    add([
+      sprite('santa-head'),
+      layer('ui'),
+      pos(lifeSpacing, 1),
+      scale(.15)
+    ])
+    lifeSpacing += 20
+  }
+
   // add level numbers
   add([
     text('level ' + parseInt(level + 1)),
-    pos(90, 6),
+    pos(20, 6),
     {
       value: level,
     },
@@ -662,11 +677,27 @@ function level_up(level, score, music) {
 
 function died(level, score, music) {
 
-  go('lose', {
-    level: level,
-    score: score,
-    prev_music: music
-  })
+  lives = playerLives - 1
+
+  if (playerLives == 0) {
+
+    go('lose', {
+      level: level,
+      score: score,
+      prev_music: music
+    })  
+
+  } else {
+
+      go('game', {
+        level: level,
+        score: score,
+        prev_music: music,
+        playerLives: lives
+      })
+
+  }
+
 
 }
 
