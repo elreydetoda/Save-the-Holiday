@@ -95,7 +95,7 @@ html {
 }
 
 .navigation__list--active {
-  color: #fff !important;
+  color: #5a9ff7 !important;
 }
 
 .navigation__list--item {
@@ -105,7 +105,7 @@ html {
 .navigation__list--link:link,
 .navigation__list--link:visited {
   text-decoration: none;
-  color: #5a9ff7;
+  color: #ffffff;
 }
 
 /* TODO: ask for info */
@@ -247,4 +247,8 @@ footer {
   justify-content: center;
   font-size: 1.25rem;
   padding-bottom: 2rem;
+}
+
+.home-body {
+  background-color: cornflowerblue;
 }
