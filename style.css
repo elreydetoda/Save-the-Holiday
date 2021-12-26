@@ -191,3 +191,8 @@ footer {
 .btn-primary {
   margin-right: 1%;
 } */
+
+a {
+  text-decoration: none;
+  color: #0951ac;
+}
