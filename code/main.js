@@ -213,14 +213,14 @@ const levelCfg = {
   'z': () => [sprite('mystery-box2'), 'lightning-surprise', 'surprise-box', solid(), scale(0.35)],
   '\}': () => [sprite('unboxed'), solid(), scale(0.35)],
   '|': () => [sprite('lamp-post'), 'post', solid()],
-  '^': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
-  'b': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
+  '^': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bleft', scale(0.2), body(), { dir: 1 }],
+  'b': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bright', scale(0.2), body(), { dir: 1 }],
   '-': () => [sprite('block-2'), 'block-2', 'ground', 'melting', solid(), scale(0.35)],
   '_': () => [sprite('block-3'), 'block-3', 'ground', 'melting', solid(), scale(0.35)],
   'x': () => [sprite('block-5'), 'ground', 'melting', 'block-5', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
-  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), projectiles(), {
+  'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', scale(0.3), projectiles(), {
     dir: 1,
     lightning: {
       count: 0,
@@ -315,8 +315,6 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
 
   // add lives
   playerLives = lives ? lives : playerLives
-  console.log(playerLives)
-  console.log(lives)
   for (x = 0; x < playerLives; x++) {
     add([
       sprite('santa-head'),
@@ -503,7 +501,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
 
   // -- enemies collide with objects --
   // TO-DO: Change to box
-  collides('s-enemy', 'snowball', (e, s) => {
+  overlaps('s-enemy', 'snowball', (e, s) => {
     play('jumpOnEnemy', {
       volume: 0.2,
     })
@@ -565,13 +563,13 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
 
   /* *********** enemy collides -> object/block ************** */
 
-  collides('b-enemy', 'tree', (b, t) => {
+  overlaps('b-enemy', 'tree', (b, t) => {
     b.dir = -b.dir
   })
-  collides('b-enemy', 'b-enemy', (b, t) => {
+  overlaps('b-enemy', 'b-enemy', (b, t) => {
     b.dir = -b.dir
   })
-  collides('s-enemy', 'ground', (s, g) => {
+  overlaps('s-enemy', 'ground', (s, g) => {
     // maybe needs a bit more help to get off the ground?
     // don't know what need to do *= ... 🙃
     s.dir *= -s.dir
@@ -797,7 +795,7 @@ function projectiles() {
         } else if (this.projectile.type === 'lightning' && this.lightning.throw) {
           // TODO: actually implement this
           //TO-DO: use lightning image if possible
-          console.log(this)
+          // console.log(this)
           const proj = add([
             rect(3, 3),
             pos(this.pos.add(0, 0)),
@@ -806,7 +804,7 @@ function projectiles() {
             // 'magic',
             // 'projectile'
           ])
-          console.log('reached')
+          // console.log('reached')
           this.lightning.count++
           proj_thrown = true
         }
