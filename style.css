@@ -302,12 +302,12 @@ footer {
 } */
 
 .home-body {
-  background-color: cornflowerblue;
+  background-color: rgb(179, 209, 249);
   height: 91vh;
 }
 
 .home-footer {
-  background-color: cornflowerblue !important;
+  background-color: rgb(179, 209, 249)  !important;
 }
 
 .home-overflow {
