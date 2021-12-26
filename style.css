@@ -142,7 +142,7 @@ html {
   display: flex;
   gap: 2rem;
   align-items: start;
-  justify-content: center;
+  justify-content: start;
 }
 
 .story__content--img {
