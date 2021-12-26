@@ -1,0 +1,261 @@
+/* ************************* large affects ************************* */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+body {
+  box-sizing: border-box;
+  /* font-family: "Lato", sans-serif; */
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+html {
+  /* for rem calculation to 10px start */
+  font-size: 62.5%;
+}
+
+/* ************************* RE-USABLE COMPONENTS ************************* */
+
+/* ************* HEADERS ************ */
+.heading-primary {
+  font-size: 7rem;
+}
+
+.heading-secondary {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.heading-tertiary {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.heading-quatenary {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+/* ************* UTILITY CLASSES ************ */
+.mb-sm {
+  margin-bottom: 1rem;
+}
+
+.sub-section {
+  margin-bottom: 4rem;
+}
+
+.img-sm-h {
+  max-height: 5rem !important;
+
+}
+
+.img-md-h {
+  max-height: 7rem !important;
+
+}
+
+/* ************* WRAPPERS ************ */
+.container {
+  max-width: 120rem;
+  padding: 0 9.2rem;
+  margin: 0 auto;
+}
+
+/* ************************* SECTIONS ************************* */
+/* ************* HEADER ************ */
+
+.header {
+  padding: 2rem 8rem;
+  background-color: #0951ac;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__logo {
+  max-width: 30%;
+}
+
+
+/* ************* NAVIGATION ************ */
+
+.navigation {
+  font-size: 2rem;
+}
+
+.navigation__list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.navigation__list--active {
+  color: #5a9ff7 !important;
+}
+
+.navigation__list--item {
+  /* border: .25rem solid black; */
+}
+
+.navigation__list--link:link,
+.navigation__list--link:visited {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/* TODO: ask for info */
+.navigation__list--link:hover,
+.navigation__list--link:active {
+}
+
+/* ************* HERO ************ */
+
+.section-hero {
+  position: relative;
+  background-image: url("sprites/environment.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero {
+  padding: 21rem 0 9rem 0;
+}
+
+.hero__text-box {
+  margin-top: 2rem;
+}
+
+.hero__img-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  padding: 0 0;
+}
+
+/* ************* GAME ************ */
+.section-game {
+  padding: 3rem 5rem;
+  font-size: 1.5rem;
+}
+
+/* ******* STORY ******** */
+.story__content {
+  display: flex;
+  gap: 2rem;
+  align-items: start;
+  justify-content: start;
+}
+
+.story__content--img {
+  padding-left: 2rem;
+}
+.story__content--text {
+}
+
+/* ******* PLAY ******** */
+
+.play__section {
+  margin-bottom: 2rem;
+}
+
+.play__list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  /* justify-items: center; */
+  /* align-content: center; */
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.play__list--item span::before {
+  content: "["
+}
+.play__list--item span::after {
+  content: "]"
+}
+
+.play__list--item {
+  /* flex: 0 1 8rem */
+
+}
+
+.play__list--item img {
+  max-width: 100%;
+}
+
+/* ************* NEW VERSION  ************ */
+
+.section-new_version{
+  padding: 3rem 5rem;
+  font-size: 1.5rem;
+}
+
+.new-version__content {
+  margin-bottom: 2rem;
+}
+
+.new-version__changed--box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr );
+  align-content: center;
+  justify-items: start;
+  margin: 2rem 0;
+  column-gap: 2rem;
+  row-gap: 1rem;
+
+}
+
+@media (max-width: 38em) {
+.new-version__changed--box {
+  grid-template-columns: repeat(1, 1fr );
+}
+
+}
+
+.new-version__changed--box ul li{
+  margin-left: 3rem;
+}
+
+
+/* html,
+footer {
+  background: rgb(139, 146, 155);
+}
+.btn-primary {
+  margin-right: 1%;
+} */
+
+a {
+  text-decoration: none;
+  color: #0951ac;
+}
+
+/* @media (max-width: 75em ){
+  .container {
+    max-width: 120rem;
+    padding: 0 9.2rem;
+    margin: 0 auto;
+  }
+} */
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.home-body {
+  background-color: cornflowerblue;
+}
