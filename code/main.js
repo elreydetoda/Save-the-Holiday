@@ -194,7 +194,7 @@ scene('menu', () => {
 
   // intro music
   introMusic = play("introMusic", {
-    volume: 0.3,
+    volume: 0.2,
     loop: true
   })
 
@@ -221,7 +221,7 @@ scene('menu', () => {
   // TODO: figure out how to detect which object is clicked
   mouseClick(() => {
     play('mouseClick', {
-      volume: 0.8,
+      volume: 0.3,
     })
     go('game', { level: 0, score: 0, prev_music: introMusic })
   })
@@ -235,7 +235,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
 
   // gameplay music
   gameplayMusic = play("gameplay", {
-    volume: 0.3,
+    volume: 0.2,
     loop: true
   })
 
@@ -322,8 +322,8 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   player.action(() => {
     camPos(player.pos)
     if (player.pos.y >= FALL_DEATH) {
-      play('fallOff', {
-        volume: 0.8,
+      play('runIntoEnemy', {
+        volume: 0.2,
       })
       died(level, scoreLabel.value, gameplayMusic)
     }
@@ -356,9 +356,9 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   })
 
   keyDown('s', () => {
-    play('shoot', {
-      volume: 0.8,
-    })
+    // play('shoot', {
+    //   volume: 0.2,
+    // })
     player.shoot('snowball')
   })
 
@@ -426,7 +426,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // surprise box - green present 
   collides('magic', 'present-surprise', (m, p) => {
     play('giftReveal', {
-      volume: 0.5,
+      volume: 0.15,
     })
     gameLevel.spawn('$', p.gridPos.sub(1, 2))
     gameLevel.spawn('=', p.gridPos.sub(0, 0))
@@ -436,7 +436,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // surprise box - candy cane
   collides('magic', 'candy-cane-surprise', (m, c) => {
     play('giftReveal', {
-      volume: 0.5,
+      volume: 0.15,
     })
     gameLevel.spawn('j', c.gridPos.sub(0, 1))
     gameLevel.spawn('=', c.gridPos.sub(0, 0))
@@ -446,7 +446,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // surprise box - blue lightning
   collides('magic', 'lightning-surprise', (m, l) => {
     play('giftReveal', {
-      volume: 0.5,
+      volume: 0.15,
     })
     gameLevel.spawn('l', l.gridPos.sub(0, 1.5))
     gameLevel.spawn('=', l.gridPos.sub(0, 0))
@@ -458,9 +458,14 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // -- enemies collide with objects --
   // TO-DO: Change to box
   collides('s-enemy', 'snowball', (e, s) => {
-    play('hitWithSnowBall')
-    destroy(e)
+    play('jumpOnEnemy', {
+      volume: 0.2,
+    })
     destroy(s)
+    destroy(e)
+    scoreLabel.value += 10
+    scoreLabel.text = scoreLabel.value
+
   })
 
 
@@ -474,7 +479,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // snowball restore melting snow box
   collides('snowball', 'melting', (s, m) => {
     play('hitWithSnowBall', {
-      volume: 0.5,
+      volume: 0.2,
     })
     gameLevel.spawn('=', m.gridPos.sub(0, 0))
     destroy(s)
@@ -495,7 +500,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // green present
   player.collides('green-present', (g) => {
     play('collectGift', {
-      volume: 0.5,
+      volume: 0.05,
     })
     destroy(g)
     scoreLabel.value += 10
@@ -505,7 +510,7 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   // candy cane
   player.collides('candy-cane', (c) => {
     play('collectGift', {
-      volume: 0.5,
+      volume: 0.05,
     })
     destroy(c)
     scoreLabel.value += 10
@@ -548,14 +553,14 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
   player.collides('enemy', (e) => {
     if (isJumping) {
       play('jumpOnEnemy', {
-        volume: 0.9,
+        volume: 0.2,
       })
       destroy(e)
       scoreLabel.value += 5
       scoreLabel.text = scoreLabel.value
     } else {
       play('runIntoEnemy', {
-        volume: 0.5,
+        volume: 0.2,
       })
       died(level, scoreLabel.value, gameplayMusic)
     }
@@ -608,7 +613,7 @@ scene('lose', ({ level, score, prev_music }) => {
   mouseClick(() => {
     loseMusic.pause()
     play('mouseClick', {
-      volume: 0.8,
+      volume: 0.3,
     })
     go('game', { level: 0, score: 0, prev_music: loseMusic, lives: 3 })
   })
@@ -621,7 +626,7 @@ scene('win', ({ level, score, prev_music }) => {
 
   // win scene music
   winMusic = play("winScene", {
-    volume: 0.3,
+    volume: 0.1,
     loop: true
   })
 
@@ -653,7 +658,7 @@ scene('win', ({ level, score, prev_music }) => {
   mouseClick(() => {
     winMusic.pause()
     play('mouseClick', {
-      volume: 0.8,
+      volume: 0.3,
     })
     go('game', { level: 0, score: 0, prev_music: winMusic })
   })
@@ -680,7 +685,7 @@ function big() {
     },
     smallify() {
       play('shrink', {
-        volume: 0.8,
+        volume: 0.4,
       })
       this.scale = vec2(.65)
       timer = 0
@@ -689,7 +694,7 @@ function big() {
     },
     biggify(time) {
       play('grow', {
-        volume: 0.5,
+        volume: 0.03,
       })
       this.scale = vec2(1)
       timer = time
