@@ -303,6 +303,15 @@ footer {
 
 .home-body {
   background-color: cornflowerblue;
+  height: 91vh;
+}
+
+.home-footer {
+  background-color: cornflowerblue !important;
+}
+
+.home-overflow {
+  overflow: hidden;
 }
 
 /* CREDITS PAGE */
