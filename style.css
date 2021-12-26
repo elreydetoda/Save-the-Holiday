@@ -316,11 +316,12 @@ footer {
 
 .section-creators {
   padding: 3rem 0;
+  font-size: 1.5rem;
 }
 
 .creators__box {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 30fr 70fr;
   justify-items: start;
   align-items: center;
   gap: 2rem;
@@ -328,4 +329,8 @@ footer {
 
 .creators__item--img {
   justify-self: center;
+}
+
+.section-game-extras {
+
 }
