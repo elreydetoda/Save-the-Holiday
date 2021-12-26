@@ -218,7 +218,7 @@ scene('menu', () => {
 })
 
 // game scene
-scene('game', ({ level, score, prev_music }) => {
+scene('game', ({ level, score, prev_music, lives = playerLives }) => {
 
   prev_music.pause()
 
@@ -257,6 +257,9 @@ scene('game', ({ level, score, prev_music }) => {
   ])
 
   // add lives
+  playerLives = lives ? lives : playerLives
+  console.log(playerLives)
+  console.log(lives)
   for (x = 0; x < playerLives; x++) {
     add([
       sprite('santa-head'),
@@ -311,7 +314,7 @@ scene('game', ({ level, score, prev_music }) => {
     if (player.grounded()) {
       isJumping = true
       player.jump(CURRENT_JUMP_FORCE)
-      console.log(CURRENT_JUMP_FORCE)
+     // console.log(CURRENT_JUMP_FORCE)
     }
   })
 
@@ -536,7 +539,7 @@ scene('lose', ({ level, score, prev_music }) => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 0, score: 0, prev_music: loseMusic })
+    go('game', { level: 0, score: 0, prev_music: loseMusic, lives: 3 })
   })
 })
 
@@ -679,7 +682,7 @@ function died(level, score, music) {
 
   lives = playerLives - 1
 
-  if (playerLives == 0) {
+  if (playerLives === 1) {
 
     go('lose', {
       level: level,
@@ -693,7 +696,7 @@ function died(level, score, music) {
         level: level,
         score: score,
         prev_music: music,
-        playerLives: lives
+        lives: lives
       })
 
   }
