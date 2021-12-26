@@ -158,7 +158,7 @@ const maps = [
 const levelCfg = {
   width: 20,
   height: 20,
-  '=': () => [sprite('block-4'), 'ground', 'block', solid(), scale(0.35)],
+  '=': () => [sprite('block-4'), 'ground', 'block', 'block-4', solid(), scale(0.35)],
   '$': () => [sprite('present'), 'green-present', 'gift', solid(), scale(0.9)],
   'j': () => [sprite('candy-cane2'), 'candy-cane', 'gift', solid(), scale(0.35)],
   'l': () => [sprite('lightning-blue'), 'lightning-blue', 'gift', solid(), scale(0.2)],
@@ -169,9 +169,9 @@ const levelCfg = {
   '|': () => [sprite('lamp-post'), 'post', solid()],
   '^': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bleft', solid(), scale(0.2), body(), { dir: 1 }],
   'b': () => [sprite('bunny-enemy'), 'enemy', 'b-enemy', 'bright', solid(), scale(0.2), body(), { dir: 1 }],
-  '-': () => [sprite('block-2'), 'ground', 'melting', solid(), scale(0.35)],
-  '_': () => [sprite('block-3'), 'ground', 'melting', solid(), scale(0.35)],
-  'x': () => [sprite('block-5'), 'ground', solid(), scale(0.35)],
+  '-': () => [sprite('block-2'), 'block-2', 'ground', 'melting', solid(), scale(0.35)],
+  '_': () => [sprite('block-3'), 'block-3', 'ground', 'melting', solid(), scale(0.35)],
+  'x': () => [sprite('block-5'), 'ground', 'block-5', solid(), scale(0.35)],
   't': () => [sprite('tree'), 'right-tree', 'tree', solid(), scale(0.45)],
   'f': () => [sprite('tree'), 'left-tree', 'tree', solid(), scale(0.45)],
   'w': () => [sprite('wingMan1'), 'enemy', 's-enemy', solid(), scale(0.3), projectiles(), {
@@ -223,7 +223,7 @@ scene('menu', () => {
     play('mouseClick', {
       volume: 0.8,
     })
-    go('game', { level: 2, score: 0, prev_music: introMusic })
+    go('game', { level: 0, score: 0, prev_music: introMusic })
   })
 
 })
@@ -525,6 +525,23 @@ scene('game', ({ level, score, prev_music, lives = playerLives }) => {
     // don't know what need to do *= ... 🙃
     s.dir *= -s.dir
   })
+
+  // sunbeam melt ice on contact
+  // collides('s-enemy', 'block-4', (s, g) => {
+  //   gameLevel.spawn('_', g.gridPos.sub(0, 0))
+  // })
+
+  // collides('s-enemy', 'block-3', (s, b) => {
+  //   gameLevel.spawn('=', b.gridPos.sub(0, 0))
+  // })
+
+  // collides('s-enemy', 'block-2', (s, b) => {
+  //   gameLevel.spawn('x', b.gridPos.sub(0, 0))
+  // })
+
+  // collides('s-enemy', 'block-5', (s, b) => {
+  //   destroy(b)
+  // })
 
 
   // bunny and sunbeam enemies
