@@ -334,3 +334,15 @@ footer {
 .section-game-extras {
 
 }
+
+.sprites__box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4rem;
+  margin-bottom: 2rem;
+}
+
+.sprites__box img {
+  flex-basis: 4rem;
+}
