@@ -77,4 +77,4 @@ Some future enhancements include:
 
 ###### YT Demo Video
 
-[![Blinking LEDs](https://youtu.be/kErJsKQj3OM)
+[![image](https://user-images.githubusercontent.com/25125692/152461484-f19963f4-7bb0-4888-a35d-9ad5c13120b9.png)](https://www.youtube.com/watch?v=kErJsKQj3OM)
