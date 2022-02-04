@@ -1,3 +1,5 @@
+
+## Our first version won 2nd Place!
 ![image](https://user-images.githubusercontent.com/25125692/152456956-e6ac5f5c-fdc5-445a-9eaf-4e6c55e23e8a.png)
 
 ## Story
@@ -8,7 +10,7 @@ Some mischievous bunnies have taken all the presents and candy canes from the No
 ![Game Menu](https://user-images.githubusercontent.com/25125692/144735275-c227882b-ca07-4cab-9689-7fcf19db0b16.PNG)
 
 ## Inspiration
-As lovers of Mario and 2D games, we wanted to bring a holiday theme and platformer feel to the some of the aspects of Mario. While we have designed a couple games before with other groups, we are both new to Kaboom JS. It gave us a fun chance to return to game design and learn to develop ourselves! What better way to have a **#Hackcoming?** 
+As lovers of Mario and 2D games, we wanted to bring a holiday theme and platformer feel to the some of the aspects of Mario. While we created v1.0.0 for the Hackcoming Hackathon, there was a lot of room for improvement. For **Hacky Winterland**, we have created our v2.0.0 release with awesome added functionality and bug fixes to improve the gameplay just in time for Christmas!
 
 ## What it does
 **Save the Holiday!** has some cool pretty functionality: 
@@ -18,40 +20,61 @@ As lovers of Mario and 2D games, we wanted to bring a holiday theme and platform
 * Avoid mischievous bunnies and flying sunbeams to reach the next level 
 * Ability to play again from awesome-looking win and lose screens
 
+---
+### UPDATES WITH VERSION 2.0.0
+**Save the Holiday!** now has a website with a home, about, credits, and play page. In addition to a completely revamped website and a rewrite of the game's functions with Kaboom JS v0.5.0, we have done the following things to the game.
+
+**Added Functionality:**
+* Continuous enemy movement (up, down, left, and right)
+* Improved level design and added levels
+* Ability to freeze melting ice boxes
+* Ability to destroy sun beam enemies with snowballs
+* Player lives to repeat current level until all are lost
+
+**Bug Fixes from v1.0.0:**
+* Unlimited firing rates and jumping heights
+* Object collision errors preventing enemy motion
+* Object collision errors preventing snowball effects
+* Music looping into other scenes
+---
+
 ## How we built it
 We used various tools throughout this process: 
 1. **Jitsi** was used to stay connected, discuss issues, and share our screens.
 2. **GitHub** was used for version control and issue tracking.
-3. **Replit** was used for development and testing gameplay.
+3. **VS Code** and the **Live Server** plugin was used for development and testing gameplay.
 4. **Photoshop** was used, along with Kenney free assets, to create the sprites and screens.
 5. **GoDaddy** was used to obtain the domain name, and **Linode** was used to host the **Docker** containerized game.
 
 ## Challenges we ran into
-Kaboom is a pretty new JS library, so it was hard to find updated documentation for various functions and how they should be used. Many tutorials were using deprecated functions or versions Replit no longer had. 
+With the bugs we encountered in v1.0.0, many were related to functions that did not work as expected in the updated versions of Kaboom JS. This weekend, we ended up needing to re-write the entire game in an older version of Kaboom JS, which fixed many of the bugs but also left us with some limitations. This challenged us to find other ways to implement the functionality we wanted that was limited in the older version of Kaboom JS.
 
 ## Accomplishments that we're proud of
-With the challenges of deprecated functions and little documentation, we were proud of how many things we were able to figure out working together and thinking through the logic. We were also happy with how much we were able to do in such a short time frame. 
+With version 0.5.0 of Kaboom JS, we were able to get all our main functionality working and add some awesome new features. It was quite a rewrite and rebuilding process that ended in a game we are really happy with as new game developers!
+
+When it comes to the website, we have both used templates to build others before, but neither of us had created a website with any kind of styling from scratch. There was quite a learning curve to creating from scratch, but we were very happy with what we were able to do in such a short time!
 
 ## What we learned
-Documentation, or no documentation, if you have the right teammate, anything is possible! We learned how to really put our minds together and get creative. 
+If you continue to hit walls with a certain version of a language or library, it may mean you need to revert to an older version to get things working correctly. We also learned to use GitHub Project Boards to help with issue tracking!
 
 ## What's next for Save the Holiday!
 Some future enhancements include: 
-* Improved enemy movements
-* Improved level design
-* Additional levels and challenges
+* Health bar for player
+* Custom magic and snowballs
+* A mobile-friendly environment
+* High score tracker
 
 ## Gallery of photos
 
+###### New Website
+![image](https://user-images.githubusercontent.com/25125692/152457627-8ffae6db-686f-4077-ac05-98f8b31f425d.png)
+
 ###### Level 1
-![image](https://user-images.githubusercontent.com/10230166/144745180-1649e422-a43e-41a2-a20c-7e856300878f.png)
+![image](https://user-images.githubusercontent.com/25125692/152457646-29afb0aa-c192-4d82-a1c5-65aabcdf7886.png)
 
-###### Level 3
-![image](https://user-images.githubusercontent.com/10230166/144745205-2ccf3625-fe22-4c20-b0e3-f944115b21b8.png)
-
-###### Win Scene
+###### Win Scene on Replit (v1.0.0)
 ![image](https://user-images.githubusercontent.com/10230166/144745252-c9388cf6-d4db-4751-9dc4-ff701924e469.png)
 
 ###### YT Demo Video
 
-[![Blinking LEDs](http://img.youtube.com/vi/6sjrm4j6EW8/0.jpg)](https://youtu.be/6sjrm4j6EW8)
+[![Blinking LEDs](https://youtu.be/kErJsKQj3OM)
