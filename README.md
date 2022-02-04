@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/25125692/152456956-e6ac5f5c-fdc5-445a-9eaf-4e6c55e23e8a.png)
+
 ## Story
 ##### The Holidays are almost here!
 Some mischievous bunnies have taken all the presents and candy canes from the North Pole. To make matters worse, flying sun beams have broken through the ozone and threaten to melt all the ice!
